@@ -11,6 +11,7 @@ import Rating from "@material-ui/lab/Rating";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
+// put in some type of a global file (constants) / env-plugin w/ webpack
 const BASE_URL = "http://localhost:3000/api/users";
 
 const useStyles = makeStyles({
@@ -50,13 +51,13 @@ function ProductCard() {
     try {
       const userProducts = await axios.get(BASE_URL + `/products/${userId}`);
       if (userProducts) {
-        message: "Products Exist for this userId!";
+        "Products Exist for this userId!";
         const newProductArray = userProducts.data.userProducts;
 
         setProducts(newProductArray);
         console.log(newProductArray);
       } else {
-        message: "No products for that userId";
+        "No products for that userId";
       }
     } catch (err) {
       console.error(err);
