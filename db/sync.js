@@ -8,6 +8,8 @@ async function createTables() {
   try {
     //TODO: Add image array
     //Users table
+
+    // remove shopName; shop should have a fkey to user who runs / owns it
     await client.query(
       `CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -27,6 +29,12 @@ async function createTables() {
 
     //TODO: Add image array
     //Products table
+
+    // consider making delivery an enum; a few defined options
+    // consider making a user_product_rating table
+    // categoryId should be many to many table; have; can remove column here
+    // change userId to shopId
+
     await client.query(`
             CREATE TABLE IF NOT EXISTS products (
                 id SERIAL PRIMARY KEY,
@@ -42,6 +50,7 @@ async function createTables() {
             );`);
 
     //User_products join table
+    // move quantity here from products so multiple sellers can have diff quantities of same product
     await client.query(`
             CREATE TABLE IF NOT EXISTS user_products (
                 id SERIAL PRIMARY KEY,
@@ -66,6 +75,9 @@ async function createTables() {
 
     //TODO: Add media array
     //Reviews table
+
+    // reviews belong to a user_product?
+    // add lower and upper bound to rating
     await client.query(`
             CREATE TABLE IF NOT EXISTS reviews(
                 id SERIAL PRIMARY KEY,
@@ -77,6 +89,7 @@ async function createTables() {
             );`);
 
     //Product_reviews join table
+    // seems unnecessary; review belongs to ONE user_product
     await client.query(`
             CREATE TABLE IF NOT EXISTS product_reviews(
                 id SERIAL PRIMARY KEY,
@@ -85,6 +98,10 @@ async function createTables() {
             );`);
 
     //Carts table (userId not required for non-users to be able to purchase)
+    // not enforcing foreign keys in products int[]
+    // remove userId
+    // start with just: cart belongs to sessionId
+    // expand to sessionId or userId
     await client.query(`
             CREATE TABLE IF NOT EXISTS carts(
                 id SERIAL PRIMARY KEY,
@@ -93,6 +110,8 @@ async function createTables() {
             );`);
 
     //Cart_products join table
+    // quantity should be here; for amount purchasing
+    // price purchased at
     await client.query(`
             CREATE TABLE IF NOT EXISTS cart_products(
                 id SERIAL PRIMARY KEY,
@@ -102,6 +121,8 @@ async function createTables() {
 
     //TODO: Add support for receipt_id to table
     //Orders table
+    // can remove; could move needed columns into cart
+    // add isActive to cart
     await client.query(`
             CREATE TABLE IF NOT EXISTS orders(
                 id SERIAL PRIMARY KEY,
@@ -113,6 +134,7 @@ async function createTables() {
             );`);
 
     //User_orders join table
+    // can remove; add userId / sessionId to a cart
     await client.query(`
             CREATE TABLE IF NOT EXISTS user_orders(
                 id SERIAL PRIMARY KEY,

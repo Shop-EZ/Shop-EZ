@@ -19,6 +19,8 @@ import List from "@material-ui/core/list";
 import { DrawerContext } from "../DrawerContext";
 import variables from "../styles";
 
+// consider breaking this file out into multiple components
+
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
 const {
@@ -324,7 +326,7 @@ function CartDrawer() {
                       type="number"
                       min="1"
                       defaultValue={productObj.quantity}
-                    ></input>
+                     />
 
                     <div className={removeBtnContainer}>
                       <Button
@@ -356,7 +358,7 @@ function CartDrawer() {
       onClose={() => toggleDrawer("cart")}
       classes={{ paper: drawerPaper }}
     >
-      <div className={blankSpace}></div>
+      <div className={blankSpace} />
       <div className={drawerContainer}>{cartList()}</div>
     </Drawer>
   );

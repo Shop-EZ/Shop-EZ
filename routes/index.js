@@ -9,19 +9,21 @@ const jwt = require('jsonwebtoken');
 const { getUserById } = require('../db');
 const { JWT_SECRET } = process.env;
 
+// install eslint and prettier for code formatting consistency
 
 apiRouter.use(async (req, res, next) => {
     const prefix = 'Bearer ';
     const auth = req.header('Authorization');
 
-    if (!auth) { 
+    if (!auth) {
       next();
     } else if (auth.startsWith(prefix)) {
       const token = auth.slice(prefix.length);
-  
+
       try {
         const { id } = jwt.verify(token, JWT_SECRET);
-  
+
+        // maybe remove if?
         if (id) {
           req.user = await getUserById(id);
           next();
@@ -37,15 +39,15 @@ apiRouter.use(async (req, res, next) => {
     }
   });
 
-  
+
   apiRouter.use((req, res, next) => {
     if (req.user) {
       console.log("User is set:", req.user);
     }
-  
+
     next();
   });
-  
+
 
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
@@ -53,10 +55,10 @@ apiRouter.use('/users', usersRouter);
 const productsRouter = require('./products');
 apiRouter.use('/products', productsRouter);
 
-const shopsRouter = require('./shops.js')
+const shopsRouter = require('./shops.js');
 apiRouter.use('/shops', shopsRouter);
 
-const reviewsRouter = require('./reviews.js')
+const reviewsRouter = require('./reviews.js');
 apiRouter.use('/reviews', reviewsRouter);
 
 const cartsRouter = require('./carts');
@@ -69,7 +71,10 @@ const categoriesRouter = require('./categories');
 apiRouter.use('/categories', categoriesRouter);
 
 
-
+// could be more verbose; this will be done automatically
+// should not be sent as 200;
+// use 500 (server error) as last resort
+// set res.status before nexting, so error will have correct status
 apiRouter.use((error, req, res, next) => {
     res.send(error);
   });
