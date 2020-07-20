@@ -43,7 +43,7 @@ const useStyles = makeStyles({
     },
 });
 
-const userId = 2;
+const userId = 1;
 
 function ProductCards({ cart, setCart }) {
     const [products, setProducts] = useState([]);
