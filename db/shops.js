@@ -135,6 +135,7 @@ const getShopById = async (shopId) => {
 
 // Returns the shop object of the shop belonging to the user with the specified userId from the shops table if it exists
 const getShopByUserId = async (userId) => {
+    console.log(userId);
     try {
         const {
             rows: [shop],
@@ -143,15 +144,9 @@ const getShopByUserId = async (userId) => {
             WHERE "userId"=$1;`,
             [userId]
         );
-
-        if (!shop) {
-            throw {
-                name: "NoShopFoundError",
-                message: "Cannot find shop with that userId",
-            };
+        if (shop) {
+            return shop;
         }
-
-        return shop;
     } catch (error) {
         console.error(
             `There's been an error getting a shop by userId @ getShopByUserId(userId) in ./db/shops.js. ${error}`

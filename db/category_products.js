@@ -92,8 +92,6 @@ const getCategoryProductById = async (categoryProductId) => {
             [categoryProductId]
         );
 
-        console.log(categoryProduct);
-
         return categoryProduct;
     } catch (error) {
         console.error(

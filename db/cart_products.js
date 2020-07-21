@@ -13,18 +13,18 @@ const client = require("./client");
 /*---------------------------------- Functions ---------------------------------------*/
 
 // Adds productId's,cartId's,quantityAvailabe, quantityDesired, and purchasePrice in cart_products table
-const addProductToCart = async (productId, cartId, priceTotal) => {
+const addProductToCart = async (productId, cartId) => {
     try {
         const {
             rows: [newCartProduct],
         } = await client.query(
             `
             INSERT INTO cart_products
-            ("productId", "cartId",priceTotal)
-            VALUES ($1, $2, $3)
+            ("productId", "cartId")
+            VALUES ($1, $2)
             RETURNING *
         `,
-            [productId, cartId, priceTotal]
+            [productId, cartId]
         );
 
         return newCartProduct;
@@ -38,12 +38,8 @@ const addProductToCart = async (productId, cartId, priceTotal) => {
 
 // Removes productId's from cartId's in cart_products table
 const removeProductFromCart = async (cartProductId) => {
-    console.log("Cart productId in removeProd", cartProductId);
-
     try {
         const isCartProduct = await getCartProductById(cartProductId);
-        console.log("IS CART PRODUCT", isCartProduct);
-        console.log("Is CART PRODUCT LENGTH", isCartProduct.length);
         if (isCartProduct && isCartProduct.length) {
             const {
                 rows: [deletedCartProduct],
@@ -55,7 +51,6 @@ const removeProductFromCart = async (cartProductId) => {
             `,
                 [cartProductId]
             );
-            console.log("Delete CP", deletedCartProduct);
             return deletedCartProduct;
         } else {
             throw {
@@ -73,8 +68,6 @@ const removeProductFromCart = async (cartProductId) => {
 
 // Returns single cart product object from cart_products table
 const getCartProductById = async (cartProductId) => {
-    console.log("CP ID in getCart", cartProductId);
-
     try {
         const { rows: cartProduct } = await client.query(
             `
@@ -83,8 +76,6 @@ const getCartProductById = async (cartProductId) => {
         `,
             [cartProductId]
         );
-
-        console.log("CARTPRODUCT", cartProduct);
 
         return cartProduct;
     } catch (error) {

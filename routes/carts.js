@@ -8,20 +8,16 @@ const {
     deleteCart,
     getCartById,
     getCartByUserId,
-    insertProductToCart,
 } = require("../db/carts.js");
 const { getProductById } = require("../db/products.js");
 const {
     addProductToCart,
     removeProductFromCart,
-    getCartProductById,
     getCartProductByCartAndProductId,
-    getCartProductsByProductId,
     updateCartProducts,
     getProductsByCartId,
 } = require("../db/cart_products.js");
 const { requireUser } = require("../db/users.js");
-const products = require("../db/products.js");
 
 cartsRouter.use(async function (req, res, next) {
     console.log("A request has been made to the /api/carts endpoint.");
@@ -30,70 +26,70 @@ cartsRouter.use(async function (req, res, next) {
 
 // Create Cart Route------------------------------WORKS!
 cartsRouter.post("/create", async function (req, res, next) {
-    const { userId, productId, priceTotal } = req.body;
+    const { userId, productId } = req.body;
 
-    const cartData = {};
-
-    cartData.userId = userId;
-    cartData.productId = productId;
-    cartData.priceTotal = priceTotal;
+    const cartData = { userId, productId };
 
     try {
         const userCart = await getCartByUserId(userId);
 
         if (userCart) {
-            const cartByProductId = await getCartProductsByProductId(productId);
+            const cartByProductId = await getCartProductByCartAndProductId(
+                userCart.id,
+                productId
+            );
+            console.log("cartByProductId is ", cartByProductId);
+
+            // If cart already exists, and target product already exists in that cart, increment product in cart
             if (cartByProductId) {
                 console.log("FDFDF", cartByProductId);
-                const productId = cartByProductId.id;
-                const currentQuantity = cartByProductId.quantity;
-                const currentTotalPrice = cartByProductId.pricetotal;
-                console.log("totalpdfdf", currentTotalPrice);
+                const cartProductId = cartByProductId.id;
+                const currentQuantity = cartByProductId.qtyDesired;
 
                 console.log("got in here", productId);
 
-                const updatedQuantity = await updateCartProducts(productId, {
-                    quantity: currentQuantity + 1,
-                    pricetotal: currentTotalPrice + priceTotal,
-                });
+                const updatedQuantity = await updateCartProducts(
+                    cartProductId,
+                    {
+                        qtyDesired: currentQuantity + 1,
+                    }
+                );
 
                 res.send({
-                    name: "UpdatedProductQuantity&priceTotal",
-                    message:
-                        "Product quantity and priceTotal has been updated Succesfully",
+                    name: "UpdatedProductQuantity",
+                    message: "Product quantity has been updated Succesfully",
                     updatedQuantity: updatedQuantity,
                 });
+
+                // If cart already exists, and target product does not exist in that cart, add product to cart
             } else {
                 const cartId = userCart.id;
                 const newCartProduct = await addProductToCart(
                     productId,
-                    cartId,
-                    priceTotal
+                    cartId
                 );
 
                 res.send({
                     name: "CartProductAddedSuccess",
                     message: "Product added to cart",
-                    newCartproduct: newCartProduct,
+                    newCartProduct: newCartProduct,
                 });
             }
+
+            // If cart does not yet exist, and product therefore does not exist in that cart, create cart and add product to it
         } else {
             const newCart = await createCart({ userId });
             const userNewCart = await getCartByUserId(userId);
 
             const newCartId = userNewCart.id;
-            const newCartProduct = await addProductToCart(
-                productId,
-                newCartId,
-                priceTotal
-            );
+            const newCartProduct = await addProductToCart(productId, newCartId);
 
             if (newCart) {
                 res.send({
-                    name: "CartCreatedSuccess",
-                    message: "Here is your cart...",
+                    name: "CartCreatedAndProductAdded",
+                    message: "Here is your cart with the added product",
                     cart: newCart,
-                    newCartproduct: newCartProduct,
+                    newCartProduct: newCartProduct,
                 });
             } else {
                 throw {
@@ -162,7 +158,14 @@ cartsRouter.put("/add/:productId", async function (req, res, next) {
 
     try {
         const newCartProduct = await addProductToCart(productId, cartId);
-        res.send({ message: "Product added to cart", product: newCartProduct });
+        if (newCartProduct) {
+            res.send({
+                message: "Product added to cart.",
+                product: newCartProduct,
+            });
+        } else {
+            res.send({ message: "Error adding product to cart." });
+        }
     } catch (error) {
         console.error(error);
         const { name, message } = error;
@@ -186,10 +189,14 @@ cartsRouter.delete("/deleteCartProduct/:productId", async function (
         );
 
         const deletedCartProduct = await removeProductFromCart(cartProduct.id);
-        res.send({
-            message: "Product removed from cart.",
-            product: deletedCartProduct,
-        });
+        if (deletedCartProduct) {
+            res.send({
+                message: "Product removed from cart.",
+                product: deletedCartProduct,
+            });
+        } else {
+            res.send({ message: "Error removing product from cart." });
+        }
     } catch (error) {
         console.error(error);
         const { name, message } = error;
@@ -217,6 +224,8 @@ cartsRouter.get("/cartProducts/:cartId", requireUser, async function (
                         const product = await getProductById(
                             cartProduct.productId
                         );
+                        //TODO: re-word to qtyDesired when Caleb changes this
+                        product.quantity = cartProduct.qtyDesired;
                         cartProductsArr.push(product);
                     })
                 );
@@ -249,6 +258,29 @@ cartsRouter.get("/cartProducts/:cartId", requireUser, async function (
                 message: "No products were found in the cart specified.",
             });
         }
+    } catch (error) {
+        const { name, message } = error;
+        next({ name, message });
+    }
+});
+
+cartsRouter.put("/CartProducts/:CartProductId", async function (
+    req,
+    res,
+    next
+) {
+    const { qtyDesired } = req.body;
+    const cartProductId = req.params.CartProductId;
+
+    try {
+        const updatedCartProduct = await updateCartProducts(cartProductId, {
+            qtyDesired,
+        });
+        res.send({
+            name: "cartProdQuantityUpdated",
+            message: "The quantity of the cart product has been updated.",
+            qtyDesired,
+        });
     } catch (error) {
         const { name, message } = error;
         next({ name, message });
