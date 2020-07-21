@@ -289,6 +289,17 @@ async function createTables() {
             );`
         );
 
+        //TODO: Add media array
+        //Shops table
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS shops(
+                id SERIAL PRIMARY KEY,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                name VARCHAR(255) UNIQUE NOT NULL,
+                products INTEGER [],
+                description TEXT
+            );`);
+
         //TODO: Add image array
         //Products table
         await client.query(`
@@ -300,16 +311,16 @@ async function createTables() {
                 "qtyAvailable" INTEGER NOT NULL,
                 delivery TEXT [],
                 rating FLOAT(1),
-                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "shopId" INTEGER NOT NULL REFERENCES shops(id) ON DELETE CASCADE,
                 "categoryId" INTEGER [],
                 active BOOLEAN DEFAULT true
             );`);
 
-        //User_products join table
+        //shop_products join table
         await client.query(`
-            CREATE TABLE IF NOT EXISTS user_products (
+            CREATE TABLE IF NOT EXISTS shop_products (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "shopId" INTEGER NOT NULL REFERENCES shops(id) ON DELETE CASCADE,
                 "productId" INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE
             );`);
 
@@ -356,17 +367,6 @@ async function createTables() {
                  "qtyDesired" INTEGER DEFAULT '1',
                  UNIQUE ("cartId","productId")
             
-            );`);
-
-        //TODO: Add media array
-        //Shops table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS shops(
-                id SERIAL PRIMARY KEY,
-                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-                name VARCHAR(255) UNIQUE NOT NULL,
-                products INTEGER [],
-                description TEXT
             );`);
 
         //Receipts table
@@ -427,14 +427,6 @@ async function createTables() {
                 comment TEXT NOT NULL
             );`);
 
-        //Images Table
-        await client.query(`
-            CREATE TABLE images (
-            id SERIAL PRIMARY KEY,
-            "imgName" TEXT,
-            img BYTEA
-        );`);
-
         console.log(chalk.greenBright("Finished creating tables!"));
     } catch (error) {
         console.error(
@@ -457,17 +449,17 @@ async function dropTables() {
         DROP TABLE IF EXISTS user_support_messages;
         DROP TABLE IF EXISTS support_messages;
         DROP TABLE IF EXISTS receipts;
-        DROP TABLE IF EXISTS shops;
         DROP TABLE IF EXISTS product_reviews;
         DROP TABLE IF EXISTS reviews;
         DROP TABLE IF EXISTS cart_products;
         DROP TABLE IF EXISTS carts;
         DROP TABLE IF EXISTS category_products;
         DROP TABLE IF EXISTS categories;
-        DROP TABLE IF EXISTS user_products;
+        DROP TABLE IF EXISTS shop_products;
+        Drop TABLE IF EXISTS user_products;
         DROP TABLE IF EXISTS products;
+        DROP TABLE IF EXISTS shops;
         DROP TABLE IF EXISTS users;
-        DROP TABLE IF EXISTS images;
         `);
 
         console.log(chalk.greenBright("Finished dropping tables!"));
@@ -591,137 +583,7 @@ async function createInitialCategories() {
         throw error;
     }
 }
-//Creates seed data of initial users
-async function createInitialProducts() {
-    // Reference
-    //     id SERIAL PRIMARY KEY,
-    //     name VARCHAR(255) NOT NULL,
-    //     description TEXT NOT NULL,
-    //     price FLOAT(2) NOT NULL,
-    //     qtyAvailable INTEGER NOT NULL,
-    //     delivery TEXT [],
-    //     rating FLOAT(1),
-    //     "userId" INTEGER REFERENCES users(id) NOT NULL,
-    //     "categoryId" INTEGER []
 
-    console.log(chalk.yellow("Creating initial products..."));
-
-    try {
-        const rock = await createProduct({
-            name: "Pet Rock",
-            description:
-                "A friendly rock found in Joshua Tree looking for a home",
-            price: 300.99,
-            qtyAvailable: 1,
-            delivery: '{"pickup"}',
-            rating: 5.0,
-            userId: 3,
-            categoryId: "{2, 3}",
-        });
-
-        const turnTable = await createProduct({
-            name: "Turntables",
-            description:
-                "A pair of used Pioneer CDJ's in decent condition, perfect for getting your scratch on!",
-            price: 450.99,
-            qtyAvailable: 2,
-            delivery: '{"standard", "express", "next-day"}',
-            rating: 3.5,
-            userId: 4,
-            categoryId: "{4}",
-        });
-
-        const dress = await createProduct({
-            name: "Embroidered Dress",
-            description:
-                "One of a kind, hand-made embroidered dress from Egypt, perfect for weddings, parties, and other special occassions!",
-            price: 60.0,
-            qtyAvailable: 50,
-            delivery: '{"standard"}',
-            rating: 5.0,
-            userId: 2,
-            categoryId: "{1}",
-        });
-
-        const course = await createProduct({
-            name: "Fullstack Software Development Course",
-            description:
-                "A part-time course offered by the incredible Fullstack Academy of Code to get you coding in your dream job in 6-months",
-            price: "11000.00",
-            qtyAvailable: 999,
-            delivery: '{"electronic"}',
-            rating: 5.0,
-            userId: 1,
-            categoryId: "{5}",
-        });
-
-        const course2 = await createProduct({
-            name: "Java for Dummies Course",
-            description: "A Java course offered to beginners of all ages",
-            price: "99.00",
-            qtyAvailable: 100,
-            delivery: '{"electronic"}',
-            rating: 3,
-            userId: 1,
-            categoryId: "{5}",
-        });
-
-        const course3 = await createProduct({
-            name: "Mobile Dev for Dummies Course",
-            description:
-                "A Mobile development course offered to beginners of all ages",
-            price: "35.00",
-            qtyAvailable: 100,
-            delivery: '{"electronic"}',
-            rating: 4.0,
-            userId: 1,
-            categoryId: "{5}",
-        });
-
-        const course4 = await createProduct({
-            name: "Passive Income Ideas",
-            description:
-                "A course that teaches different ways to make passive income",
-            price: "25.00",
-            qtyAvailable: 40,
-            delivery: '{"electronic"}',
-            rating: 2.0,
-            userId: 1,
-            categoryId: "{5}",
-        });
-
-        const course5 = await createProduct({
-            name: "Entrepenuer Crash Course",
-            description: "Learn to become an entrepenuer step by step",
-            price: "65.00",
-            qtyAvailable: 100,
-            delivery: '{"electronic"}',
-            rating: 4.0,
-            userId: 1,
-            categoryId: "{5}",
-        });
-
-        const course6 = await createProduct({
-            name: "Become a Chef",
-            description:
-                "Learn to become chef as little as 1 day with this course ",
-            price: "100.00",
-            qtyAvailable: 100,
-            delivery: '{"electronic"}',
-            rating: 3.0,
-            userId: 1,
-            categoryId: "{5}",
-        });
-
-        console.log(chalk.greenBright("Finished creating initial products!"));
-    } catch (error) {
-        console.error(
-            "Error creating initial products @ db/seed.js createInitialProducts()! Error: ",
-            error
-        );
-        throw error;
-    }
-}
 //Creates seed data of initial shops
 async function createInitialShops() {
     // Reference
@@ -774,6 +636,139 @@ async function createInitialShops() {
         throw error;
     }
 }
+
+//Creates seed data of initial users
+async function createInitialProducts() {
+    // Reference
+    //     id SERIAL PRIMARY KEY,
+    //     name VARCHAR(255) NOT NULL,
+    //     description TEXT NOT NULL,
+    //     price FLOAT(2) NOT NULL,
+    //     qtyAvailable INTEGER NOT NULL,
+    //     delivery TEXT [],
+    //     rating FLOAT(1),
+    //     "shopId" INTEGER REFERENCES shops(id) NOT NULL,
+    //     "categoryId" INTEGER []
+
+    console.log(chalk.yellow("Creating initial products..."));
+
+    try {
+        const rock = await createProduct({
+            name: "Pet Rock",
+            description:
+                "A friendly rock found in Joshua Tree looking for a home",
+            price: 300.99,
+            qtyAvailable: 1,
+            delivery: '{"pickup"}',
+            rating: 5.0,
+            shopId: 4,
+            categoryId: "{2, 3}",
+        });
+
+        const turnTable = await createProduct({
+            name: "Turntables",
+            description:
+                "A pair of used Pioneer CDJ's in decent condition, perfect for getting your scratch on!",
+            price: 450.99,
+            qtyAvailable: 2,
+            delivery: '{"standard", "express", "next-day"}',
+            rating: 3.5,
+            shopId: 4,
+            categoryId: "{4}",
+        });
+
+        const dress = await createProduct({
+            name: "Embroidered Dress",
+            description:
+                "One of a kind, hand-made embroidered dress from Egypt, perfect for weddings, parties, and other special occassions!",
+            price: 60.0,
+            qtyAvailable: 50,
+            delivery: '{"standard"}',
+            rating: 5.0,
+            shopId: 2,
+            categoryId: "{1}",
+        });
+
+        const course = await createProduct({
+            name: "Fullstack Software Development Course",
+            description:
+                "A part-time course offered by the incredible Fullstack Academy of Code to get you coding in your dream job in 6-months",
+            price: "11000.00",
+            qtyAvailable: 999,
+            delivery: '{"electronic"}',
+            rating: 5.0,
+            shopId: 1,
+            categoryId: "{5}",
+        });
+
+        const course2 = await createProduct({
+            name: "Java for Dummies Course",
+            description: "A Java course offered to beginners of all ages",
+            price: "99.00",
+            qtyAvailable: 100,
+            delivery: '{"electronic"}',
+            rating: 3,
+            shopId: 1,
+            categoryId: "{5}",
+        });
+
+        const course3 = await createProduct({
+            name: "Mobile Dev for Dummies Course",
+            description:
+                "A Mobile development course offered to beginners of all ages",
+            price: "35.00",
+            qtyAvailable: 100,
+            delivery: '{"electronic"}',
+            rating: 4.0,
+            shopId: 1,
+            categoryId: "{5}",
+        });
+
+        const course4 = await createProduct({
+            name: "Passive Income Ideas",
+            description:
+                "A course that teaches different ways to make passive income",
+            price: "25.00",
+            qtyAvailable: 40,
+            delivery: '{"electronic"}',
+            rating: 2.0,
+            shopId: 1,
+            categoryId: "{5}",
+        });
+
+        const course5 = await createProduct({
+            name: "Entrepenuer Crash Course",
+            description: "Learn to become an entrepenuer step by step",
+            price: "65.00",
+            qtyAvailable: 100,
+            delivery: '{"electronic"}',
+            rating: 4.0,
+            shopId: 1,
+            categoryId: "{5}",
+        });
+
+        const course6 = await createProduct({
+            name: "Become a Chef",
+            description:
+                "Learn to become chef as little as 1 day with this course ",
+            price: "100.00",
+            qtyAvailable: 100,
+            delivery: '{"electronic"}',
+            rating: 3.0,
+            shopId: 1,
+            categoryId: "{5}",
+        });
+
+        console.log(chalk.greenBright("Finished creating initial products!"));
+    } catch (error) {
+        console.error(
+            "Error creating initial products @ db/seed.js createInitialProducts()! Error: ",
+            error
+        );
+        throw error;
+    }
+}
+
 //Create seed data of initial reviews
 async function createInitialReviews() {
     //Reference
@@ -883,11 +878,11 @@ async function bootstrap() {
         await dropTables();
         await createTables();
         await createInitialUsers();
+        await createInitialShops();
         await createInitialCategories();
         await createInitialProducts();
-        await createInitialShops();
-        await createInitialReviews();
         await createInitialCarts();
+        await createInitialReviews();
     } catch (error) {
         console.error(
             "Error bootstrapping in ./db/seed.js at bootstrap(). Error: ",

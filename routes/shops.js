@@ -9,6 +9,9 @@ const {
     updateShop,
     deleteShop,
 } = require("../db/shops.js");
+
+const { getShopProductsByShopId, getProductById } = require("../db");
+
 const { requireUser } = require("../db/users.js");
 const shops = require("../db/shops.js");
 
@@ -86,6 +89,40 @@ shopsRouter.delete("/delete/:shopId", requireUser, async function (
             res.send({
                 message: "Shop successfully deleted.",
                 shop: deletedShop,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        const { name, message } = error;
+        next({ name, message });
+    }
+});
+
+//Get Products By ShopID Route---------------------------------Works!
+shopsRouter.get("/products/:shopId", async function (req, res, next) {
+    const shopId = req.params.shopId;
+
+    try {
+        const shopProductIdsArr = await getShopProductsByShopId(shopId);
+
+        if (shopProductIdsArr && shopProductIdsArr.length) {
+            const shopProducts = await Promise.all(
+                shopProductIdsArr.map(
+                    async (shopProductIdObj) =>
+                        await getProductById(shopProductIdObj.productId)
+                )
+            );
+
+            res.send({
+                name: "shopProductsFound",
+                message:
+                    "Products for this shop have been found. See attached.",
+                shopProducts,
+            });
+        } else {
+            next({
+                name: "NoShopProductsFound",
+                message: "No products have been found for the specified shop",
             });
         }
     } catch (error) {
