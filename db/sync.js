@@ -33,10 +33,10 @@ async function createTables() {
                 name VARCHAR(255) NOT NULL,
                 description TEXT NOT NULL,
                 price FLOAT(2) NOT NULL,
-                quantity INTEGER NOT NULL,
+                "qtyAvailable" INTEGER NOT NULL,
                 delivery TEXT [],
                 rating FLOAT(1),
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 "categoryId" INTEGER [],
                 active BOOLEAN DEFAULT true
             );`);
@@ -45,8 +45,8 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS user_products (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "productId" INTEGER REFERENCES products(id) NOT NULL
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "productId" INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE
             );`);
 
         //Categories table
@@ -60,8 +60,8 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS category_products(
                 id SERIAL PRIMARY KEY,
-                "categoryId" INTEGER REFERENCES categories(id) NOT NULL,
-                "productId" INTEGER REFERENCES products(id) NOT NULL
+                "categoryId" INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+                "productId" INTEGER  NOT NULL REFERENCES products(id) ON DELETE CASCADE
             );`);
 
         //TODO: Add media array
@@ -69,65 +69,29 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS reviews(
                 id SERIAL PRIMARY KEY,
-                "productId" INTEGER REFERENCES products(id) NOT NULL,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
+                "productId" INTEGER  NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 title VARCHAR(255),
                 rating INTEGER NOT NULL,
                 comment TEXT NOT NULL
-            );`);
-
-        //Product_reviews join table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS product_reviews(
-                id SERIAL PRIMARY KEY,
-                "productId" INTEGER REFERENCES products(id) NOT NULL,
-                "reviewId" INTEGER REFERENCES reviews(id) NOT NULL
             );`);
 
         //Carts table (userId not required for non-users to be able to purchase)
         await client.query(`
             CREATE TABLE IF NOT EXISTS carts(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id)
+                "userId" INTEGER REFERENCES users(id) ON DELETE CASCADE
             );`);
 
         //Cart_products join table
         await client.query(`
-           CREATE TABLE IF NOT EXISTS cart_products(
-               id SERIAL PRIMARY KEY,
-               "cartId" INTEGER REFERENCES carts(id) NOT NULL,
-               "productId" INTEGER REFERENCES products(id) NOT NULL,
-                quantity INTEGER DEFAULT '1',
-                priceTotal FLOAT(2) NOT NULL,
-                UNIQUE ("cartId","productId")
-           );`);
-
-        //TODO: Add support for receipt_id to table
-        //Orders table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS orders(
+            CREATE TABLE IF NOT EXISTS cart_products(
                 id SERIAL PRIMARY KEY,
-                products INTEGER [] NOT NULL,
-                "orderDate" DATE NOT NULL,
-                "orderTotal" FLOAT(2) NOT NULL,
-                "shippingAddress" VARCHAR(255) NOT NULL,
-                fulfilled BOOLEAN DEFAULT false
-            );`);
-
-        //User_orders join table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS user_orders(
-                id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "orderId" INTEGER REFERENCES orders(id) NOT NULL
-            );`);
-
-        //Order_products join table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS order_products(
-                id SERIAL PRIMARY KEY,
-                "orderId" INTEGER REFERENCES orders(id) NOT NULL,
-                "productId" INTEGER REFERENCES products(id) NOT NULL
+                "cartId" INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
+                "productId" INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+                 "qtyDesired" INTEGER DEFAULT '1',
+                 UNIQUE ("cartId","productId")
+            
             );`);
 
         //TODO: Add media array
@@ -135,7 +99,7 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS shops(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 name VARCHAR(255) UNIQUE NOT NULL,
                 products INTEGER [],
                 description TEXT
@@ -145,8 +109,7 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS receipts(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "orderId" INTEGER REFERENCES orders(id) NOT NULL,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 products INTEGER [] NOT NULL,
                 "orderDate" DATE NOT NULL,
                 "orderTotal" FLOAT(2) NOT NULL,
@@ -158,11 +121,10 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS support_messages(
                 id SERIAL PRIMARY KEY,
-                "customerUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "merchantUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "orderId" INTEGER REFERENCES orders(id),
-                "productId" INTEGER REFERENCES products(id),
-                "storeId" INTEGER REFERENCES shops(id),
+                "customerUserId" INTEGER  NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "merchantUserId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "productId" INTEGER REFERENCES products(id) ON DELETE CASCADE,
+                "storeId" INTEGER REFERENCES shops(id) ON DELETE CASCADE,
                 messages TEXT [] NOT NULL
             );`);
 
@@ -170,9 +132,9 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS user_support_messages(
                 id SERIAL PRIMARY KEY,
-                "customerUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "merchantUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "interactionId" INTEGER REFERENCES support_messages(id) NOT NULL
+                "customerUserId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "merchantUserId" INTEGER  NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "interactionId" INTEGER  NOT NULL REFERENCES support_messages(id) ON DELETE CASCADE
             );`);
 
         //TODO: Add media array and figure out if there's a way to make one of three fields required
@@ -189,15 +151,15 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS user_posts(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "postId" INTEGER REFERENCES posts(id) NOT NULL
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "postId" INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE
             );`);
 
         //Comments table
         await client.query(`
             CREATE TABLE IF NOT EXISTS comments(
                 id SERIAL PRIMARY KEY,
-                "postsId" INTEGER REFERENCES posts(id) NOT NULL,
+                "postsId" INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
                 comment TEXT NOT NULL
             );`);
 
@@ -226,9 +188,6 @@ async function dropTables() {
         DROP TABLE IF EXISTS shops;
         DROP TABLE IF EXISTS product_reviews;
         DROP TABLE IF EXISTS reviews;
-        DROP TABLE IF EXISTS order_products;
-        DROP TABLE IF EXISTS user_orders;
-        DROP TABLE IF EXISTS orders;
         DROP TABLE IF EXISTS cart_products;
         DROP TABLE IF EXISTS carts;
         DROP TABLE IF EXISTS category_products;

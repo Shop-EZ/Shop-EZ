@@ -12,7 +12,7 @@ const client = require("./client");
 
 /*---------------------------------- Functions ---------------------------------------*/
 
-// Add productId to associated orderId in order_products table
+// Add productId to associated reviewId in products_reviews table
 const addReviewToProduct = async (productId, reviewId) => {
     try {
         const {
@@ -35,7 +35,7 @@ const addReviewToProduct = async (productId, reviewId) => {
     }
 };
 
-// Remove productId from associated orderId in order_products table
+// Remove productId from associated reviewId in products_reviews table
 const removeReviewFromProduct = async (productReviewId) => {
     try {
         const isProductReview = await getProductReviewById(productReviewId);
@@ -67,7 +67,7 @@ const removeReviewFromProduct = async (productReviewId) => {
     }
 };
 
-// Returun order product object associated with the specified orderProductId
+// Returun review products object associated with the specified productReviewId
 const getProductReviewById = async (productReviewId) => {
     try {
         const {
@@ -89,7 +89,7 @@ const getProductReviewById = async (productReviewId) => {
     }
 };
 
-// Returun order product object associated with the specified reviewId
+// Returun product review object associated with the specified reviewId
 const getProductReviewByReviewId = async (reviewId) => {
     try {
         const {

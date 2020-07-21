@@ -56,10 +56,18 @@ function CartItemAccordion({ productObj, index }) {
         // If number provided is neither of type string or number, return early
         if (typeof num !== "number" && typeof num !== "string") return;
 
+        console.log(
+            "+num is ",
+            +num,
+            "math.floor(+num) is ",
+            Math.floor(+num),
+            "and +num === Math.floor(+num) evaluates to ",
+            +num === Math.floor(+num)
+        );
         if (+num === Math.floor(+num)) {
             return `${num}.00`;
         } else {
-            return num;
+            return Number(num).toFixed(2);
         }
     }
 
@@ -93,6 +101,7 @@ function CartItemAccordion({ productObj, index }) {
                 <CartBody
                     quantity={quantity}
                     price={formattedPrice.itemPrice}
+                    productId={productId}
                 />
             </Accordion>
         </ListItem>

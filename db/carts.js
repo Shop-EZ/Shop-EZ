@@ -23,8 +23,6 @@ const createCart = async ({ userId = NaN, products = [] }) => {
         //NaN is the only value in JS not equal to istelf, so this will return true only if userId is NaN
         const isNotNum = userId !== userId;
 
-        console.log("user id is ", userId, "and isnotnum is ", isNotNum);
-
         if (!isNotNum) {
             const {
                 rows: [cart],
@@ -48,8 +46,6 @@ const createCart = async ({ userId = NaN, products = [] }) => {
                     `,
                         [cart.id, productId]
                     );
-
-                    console.log("cartProducts is  ", cartProducts);
                 });
             }
 
@@ -73,9 +69,6 @@ const updateCart = async (id, fields) => {
     if (setString.length === 0) {
         return;
     }
-    console.log("id", id);
-    console.log("setstring", setString);
-    console.log("fields", fields);
     try {
         const {
             rows: [cart],
@@ -124,11 +117,9 @@ const getCartById = async (cartId) => {
 const deleteCart = async (cartId) => {
     try {
         const isCart = await getCartById(cartId);
-        console.log("cart", isCart);
 
         if (isCart) {
             const cartProducts = await getProductsByCartId(cartId);
-            console.log("cartProducts", cartProducts);
             const deletedCartProducts = await Promise.all(
                 cartProducts.map(
                     async (cartProdObj) =>
@@ -186,8 +177,6 @@ const getCartByUserId = async (userId) => {
 
 const insertProductToCart = async ({ userId = NaN, products = "{}" }) => {
     try {
-        console.log("userId is ", userId);
-        console.log("products is ", products);
         const {
             rows: [cart],
         } = await client.query(

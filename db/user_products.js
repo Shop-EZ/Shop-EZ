@@ -114,7 +114,7 @@ const getUserProductsByUserId = async (userId) => {
     try {
         const { rows: userProductsArr } = await client.query(
             `
-            SELECT "productId" FROM user_products
+            SELECT * FROM user_products
             WHERE "userId"=$1;
         `,
             [userId]
@@ -129,31 +129,6 @@ const getUserProductsByUserId = async (userId) => {
     }
 };
 
-const deleteUserProducts = async (orderId) => {
-    try {
-        const {
-            rows: [deletedUserProduct],
-        } = await client.query(
-            `
-            DELETE FROM user_products
-            WHERE "orderId"=$1
-            RETURNING *
-        `,
-            [orderId]
-        );
-        if (deletedUserProduct) {
-            return deletedUserProduct;
-        } else {
-            throw { message: "User_product does not exist" };
-        }
-    } catch (error) {
-        console.error(
-            `There's been an error deleting a user_product @ deleteUserProducts(orderId) in ./db/user_products.js. ${error}`
-        );
-        throw error;
-    }
-};
-
 /*---------------------------------- Exports ---------------------------------------*/
 
 module.exports = {
@@ -161,5 +136,4 @@ module.exports = {
     deleteProductFromUser,
     getUserProductsByProductId,
     getUserProductsByUserId,
-    deleteUserProducts,
 };
