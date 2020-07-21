@@ -57,12 +57,10 @@ const createUser = async ({
 }) => {
     // TODO: add profile-image to column table
     try {
-        const {
-            rows: [users],
-        } = await client.query(
+        const { rows } = await client.query(
             `INSERT INTO users(username, "firstName", "lastName", email, password, role, addresses, "paymentInfo", "shopName", public, active)
             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, $11)
-            ON CONFLICT (username) DO NOTHING
+            ON CONFLICT DO NOTHING
             RETURNING *;
             `,
             [
@@ -80,12 +78,18 @@ const createUser = async ({
             ]
         );
 
-        return users;
-    } catch (error) {
+        if (rows && rows.length) {
+            return rows;
+        } else {
+            return {
+                name: "UserAlreadyExists",
+                message: "A user with that username or email already exists.",
+            };
+        }
+    } catch ({ name, message }) {
         console.error(
-            `There's been an error creating a new user @ createUser({username, firstname, lastname, email, password, role, addresses='{}', paymentInfo='{}', shopName, public, active}) in ./db/users.js. ${error}`
+            `There's been an error creating a new user @ createUser({username, firstname, lastname, email, password, role, addresses='{}', paymentInfo='{}', shopName, public, active}) in ./db/users.js. ${name} ${message}`
         );
-        throw error;
     }
 };
 

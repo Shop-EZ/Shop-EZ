@@ -1,113 +1,76 @@
+// ./src/components/Checkout.js
+
+/*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
+
+// React
 import React, { useState } from "react";
 
-import FlightTakeoffIcon from "@material-ui/icons/FlightTakeoff";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
+// Material-UI
 import AccordionSummary from "@material-ui/core/AccordionSummary";
-import { makeStyles } from "@material-ui/core/styles";
-import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FlightTakeoffIcon from "@material-ui/icons/FlightTakeoff";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
+import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
-import ListIcon from "@material-ui/icons/List";
-import MenuItem from "@material-ui/core/MenuItem";
-import PaymentIcon from "@material-ui/icons/Payment";
-import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
+import PaymentIcon from "@material-ui/icons/Payment";
 import TextField from "@material-ui/core/TextField";
+import Accordion from "@material-ui/core/Accordion";
+import Container from "@material-ui/core/Container";
+import FormLabel from "@material-ui/core/FormLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListIcon from "@material-ui/icons/List";
+import Select from "@material-ui/core/Select";
+import Button from "@material-ui/core/Button";
+import Radio from "@material-ui/core/Radio";
 
-import TransitionsModal from "./CheckOutModal.js";
+// Local Components
+import CheckoutModal from "./CheckOutModal.js";
 
-//STYLES
-const useStyles = makeStyles({
-    wholeComponent: {
-        border: "solid #3d2f75 10px",
-        margin: "1 em",
-        marginBottom: "1em",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    header: {
-        textAlign: "center",
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    checkoutAccordion: {
-        textAlign: "center",
-        marginRight: 150,
-        marginLeft: 150,
-        padding: 30,
-        background: "white",
-        width: "80%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-    },
-    formControl: {
-        margin: 1,
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: 2,
-    },
-    completeButton: {
-        textAlign: "center",
-        marginTop: "1em",
-        marginBottom: "1em",
-    },
-    headerText: {
-        width: "100%",
-    },
-    headerWrapper: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    iconPadding: {
-        paddingRight: "1rem",
-    },
-    accordionDetails: {
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    accordionSummary: {
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});
+// Styling
+import variables from "../styles";
+const { checkoutStyling } = variables;
 
-// COMPONENT
+/*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
+
+const useStyles = makeStyles(checkoutStyling);
+
+/*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
+
 function Checkout({ setVisibility }) {
+    /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
+
+    //pass set visibility to checkout and checkout modal
+    //from there set visiblity to false on close handler
+    const [submit, setSubmit] = useState(false);
+
     const [expanded, setExpanded] = useState("");
     const [method, setMethod] = useState("");
-    const classes = useStyles();
 
     const [input, setInput] = useState({
-        first: "",
-        last: "",
-        street: "",
-        city: "",
-        state: "",
-        country: "",
-        zip: "",
-        phone: "",
-        method: "",
         cardnumber: "",
+        country: "",
+        street: "",
+        method: "",
+        phone: "",
+        first: "",
+        state: "",
+        last: "",
+        city: "",
+        zip: "",
         cvv: "",
         exp: "",
         delivery: null,
     });
 
+    /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
+
+    const classes = useStyles();
+
+    /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
     const handleInput = (key) => (event) => {
         setInput({ ...input, [key]: event.target.value });
     };
@@ -123,13 +86,11 @@ function Checkout({ setVisibility }) {
         setInput({ ...input, [method]: event.target.value });
         setMethod(event.target.value);
     };
-    //pass set visibility to checkout and checkout modal
-    //from there set visiblity to false on close handler
-    const [submit, setSubmit] = useState(false);
 
     const handleSubmit = () => {
         event.stopPropagation();
         event.preventDefault();
+
         console.log("submitted");
         setSubmit(true);
         setInput({
@@ -148,7 +109,8 @@ function Checkout({ setVisibility }) {
             delivery: null,
         });
     };
-    console.log("Submit !!", submit);
+
+    /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
     return (
         <div className={classes.wholeComponent}>
             <div className={`${classes.headerWrapper} ${classes.header}`}>
@@ -386,7 +348,7 @@ function Checkout({ setVisibility }) {
                         Complete Order
                     </Button>
                     {submit ? (
-                        <TransitionsModal
+                        <CheckoutModal
                             submit={submit}
                             setSubmit={setSubmit}
                             setVisibility={setVisibility}
@@ -397,5 +359,7 @@ function Checkout({ setVisibility }) {
         </div>
     );
 }
+
+/*-------------------------------------------------------------- Exports ------------------------------------------------------------------*/
 
 export default Checkout;

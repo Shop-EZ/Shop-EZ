@@ -1,32 +1,39 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
+// ./src/components/StoreHeader.js
+
+/*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
+
+// React
+
+import React, { useState, useEffect } from "react";
+
+// Material-UI Components
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+
+// Styling
+import variables from "../styles";
+const { storeHeaderStyling } = variables;
+
+// Other packages/modules
 import axios from "axios";
 
-const useStyles = makeStyles({
-    storeHeader: {
-        background: "#3d2f75",
-        marginTop: 30,
-        marginBottom: 30,
-        marginLeft: 75,
-        marginRight: 75,
-        padding: 20,
-        color: "#ffffff",
-    },
-});
+/*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
-const BASE_URL = "http://localhost:3000/api/users";
+const useStyles = makeStyles(storeHeaderStyling);
+
 const userId = 1;
 
+/*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
+
 function StoreHeader() {
+    /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
     const [shop, setShop] = useState({});
 
     //Get Shop by this user and store in a userState
     useEffect(() => {
         axios
-            .get(BASE_URL + `/shop/${userId}`)
+            .get(`api/users/shop/${userId}`)
             .then((userShop) => {
                 if (userShop) {
                     const shopArray = userShop.data.userShop;
@@ -41,7 +48,11 @@ function StoreHeader() {
             });
     }, []);
 
+    /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
+
     const classes = useStyles();
+
+    /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
     return (
         <Grid className={classes.storeHeader} position="static">
@@ -51,5 +62,7 @@ function StoreHeader() {
         </Grid>
     );
 }
+
+/*-------------------------------------------------------------- Exports ------------------------------------------------------------------*/
 
 export default StoreHeader;

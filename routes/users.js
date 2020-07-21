@@ -70,25 +70,34 @@ usersRouter.post("/register", async function (req, res, next) {
                     paymentInfo,
                     shopName,
                 }).then((newUser) => {
-                    const token = jwt.sign(
-                        {
-                            username,
-                            password: hashedPassword,
-                            id: newUser.id,
-                        },
-                        process.env.JWT_SECRET,
-                        {
-                            expiresIn: "1w",
-                        }
-                    );
+                    if (!newUser.name || newUser.name !== "UserAlreadyExists") {
+                        console.log("NewUser", newUser);
+                        const token = jwt.sign(
+                            {
+                                username,
+                                password: hashedPassword,
+                                id: newUser.id,
+                            },
+                            process.env.JWT_SECRET,
+                            {
+                                expiresIn: "1w",
+                            }
+                        );
 
-                    res.send({
-                        messageName: "User created!",
-                        message: "Thanks for choosing Shop-Ez!",
-                        token,
-                        username,
-                        id: newUser.id,
-                    });
+                        res.send({
+                            messageName: "UserCreated",
+                            message: "Thanks for choosing Shop-Ez!",
+                            token,
+                            username,
+                            id: newUser.id,
+                        });
+                    } else {
+                        next({
+                            messageName: "UserAlreadyExists",
+                            message:
+                                "A user with this username or email already exists! Please try again. ",
+                        });
+                    }
                 });
             }
         });

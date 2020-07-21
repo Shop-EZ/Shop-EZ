@@ -1,9 +1,11 @@
-// ./src/components/accordions/SettingsAccordion
+// ./src/components/drawers/accordions/SettingsAccordion
 
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
+// React
 import React, { useState } from "react";
 
+// Material-UI Components
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,10 +13,9 @@ import Typography from "@material-ui/core/Typography";
 import Accordion from "@material-ui/core/Accordion";
 import ListItem from "@material-ui/core/ListItem";
 
+// Styling
 import variables from "../../../styles";
 const { accordionStyling } = variables;
-
-import axios from "axios";
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
@@ -28,12 +29,12 @@ function SettingsAccordion() {
     const useStyles = makeStyles(accordionStyling);
     const classes = useStyles();
     const {
+        accountAccordion,
+        accountListItem,
         accordionRoot,
         headerTitle,
-        accordion,
-        settings,
         comingSoon,
-        listItem,
+        settings,
     } = classes;
 
     /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
@@ -45,7 +46,7 @@ function SettingsAccordion() {
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
     return (
-        <ListItem className={listItem}>
+        <ListItem className={accountListItem}>
             <Accordion
                 // @ts-ignore
                 expanded={expanded === `panelSettings`}
@@ -55,7 +56,7 @@ function SettingsAccordion() {
                 <AccordionSummary
                     aria-controls={`paneldh-content`}
                     id={`panelbh-header`}
-                    className={accordion}
+                    className={accountAccordion}
                 >
                     <Typography
                         align="center"

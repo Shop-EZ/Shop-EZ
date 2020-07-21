@@ -1,22 +1,28 @@
-// ./src/components/accordions/LogInAccordion.js
+// ./src/components/drawers/accordions/LogInAccordion.js
 
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
+// React
 import React, { useState } from "react";
 
+// Material-UI Components
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Accordion from "@material-ui/core/Accordion";
-import Button from "@material-ui/core/Button";
 import ListItem from "@material-ui/core/ListItem";
+import Button from "@material-ui/core/Button";
 
+// Local Components
 import BorderedInput from "./inputs/BoderedInput";
 import PasswordInput from "./Inputs/PasswordInput";
+
+// Styling
 import variables from "../../../styles";
 const { accordionStyling } = variables;
 
+// Other packages/modules
 import axios from "axios";
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
@@ -35,12 +41,12 @@ function LogInAccordion() {
     const useStyles = makeStyles(accordionStyling);
     const classes = useStyles();
     const {
+        accountAccordion,
+        accountListItem,
         accordionRoot,
         headerTitle,
-        accordion,
         submit,
         form,
-        listItem,
     } = classes;
 
     /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
@@ -81,7 +87,7 @@ function LogInAccordion() {
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
     return (
-        <ListItem className={listItem}>
+        <ListItem className={accountListItem}>
             <Accordion
                 // @ts-ignore
                 expanded={expanded === `panelLogIn`}
@@ -91,7 +97,7 @@ function LogInAccordion() {
                 <AccordionSummary
                     aria-controls={`panelbh-content`}
                     id={`panelbh-header`}
-                    className={accordion}
+                    className={accountAccordion}
                 >
                     <Typography
                         align="center"

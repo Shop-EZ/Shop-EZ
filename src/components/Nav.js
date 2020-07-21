@@ -16,22 +16,14 @@ import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import Badge from "@material-ui/core/Badge";
 
+// Context
 import { DrawerContext } from "../DrawerContext";
+
+// Styling
 import variables from "../styles";
+const { navStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
-
-const {
-    themeMain,
-    textColor,
-    primaryAccent,
-    secondaryAccent,
-    navHeight,
-} = variables;
-
-/*-------------------------------------------------------------- Helper Functions ------------------------------------------------------------------*/
-
-const handleSubmit = () => {};
 
 function Nav() {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
@@ -40,65 +32,7 @@ function Nav() {
 
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
-    const useStyles = makeStyles({
-        // Nav
-
-        nav: {
-            justifyContent: "space-between",
-            background: themeMain,
-            alignItems: "center",
-            height: navHeight,
-            diplay: "flex",
-            zIndex: 1301,
-        },
-
-        navHeader: {
-            zIndex: 1301,
-        },
-
-        // Logo Area
-
-        leftNav: {
-            justifyContent: "space-between",
-            alignItems: "center",
-            display: "flex",
-        },
-
-        logo: {
-            borderRight: `2px solid ${secondaryAccent}`,
-            margin: "1rem 1rem 1rem 0.5rem",
-            paddingRight: "1rem",
-            width: "6rem",
-            height: "auto",
-        },
-
-        explore: {
-            boxShadow: ` 0 1px 4px ${secondaryAccent} `,
-            opacity: "92%",
-        },
-
-        // Search Area
-        mainSearch: {
-            justifyContent: "space-between",
-            alignItems: "center",
-            display: "flex",
-            width: "55vw",
-        },
-
-        mainSearchInput: {
-            boxShadow: `0 0 4px ${primaryAccent}`,
-            borderRadius: "10px",
-            fontSize: "1.1rem",
-            padding: "0.5rem",
-            width: "50vw",
-            height: "2rem",
-            border: "none",
-
-            "&:focus": {
-                outline: "none",
-            },
-        },
-    });
+    const useStyles = makeStyles(navStyling);
 
     const classes = useStyles();
 
@@ -108,9 +42,14 @@ function Nav() {
         navHeader,
         leftNav,
         explore,
+        icons,
         logo,
         nav,
     } = classes;
+
+    /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
+
+    const handleSubmit = () => {};
 
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
@@ -141,7 +80,7 @@ function Nav() {
                         aria-label="main search filters"
                         color="inherit"
                     >
-                        <ArrowDropDown />
+                        <ArrowDropDown className={icons} />
                     </IconButton>
                     <input
                         type="search"
@@ -153,7 +92,7 @@ function Nav() {
                         aria-label="main search filters"
                         color="inherit"
                     >
-                        <SearchIcon />
+                        <SearchIcon className={icons} />
                     </IconButton>
                 </form>
 
@@ -165,7 +104,7 @@ function Nav() {
                             toggleDrawer("accountLoggedOut");
                         }}
                     >
-                        <PersonIcon />
+                        <PersonIcon className={icons} />
                     </IconButton>
 
                     <IconButton
@@ -176,7 +115,7 @@ function Nav() {
                         }}
                     >
                         <Badge badgeContent={4} color="secondary">
-                            <ShoppingCartIcon />
+                            <ShoppingCartIcon className={icons} />
                         </Badge>
                     </IconButton>
                 </div>

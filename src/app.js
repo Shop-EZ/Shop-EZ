@@ -1,45 +1,39 @@
 // ./src/app.js
+
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
+
 // React
 import ReactRouterDOM from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-// Components
+
+// Material-UI
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+
+// Local Components
+import AccountDrawer from "./components/drawers/AccountDrawer";
+import CartDrawer from "./components/drawers/CartDrawer";
 import StoreContent from "./components/StoreContent";
 import StoreHeader from "./components/StoreHeader";
-import CartDrawer from "./components/CartDrawer";
+import SignUpModal from "./components/SignUpModal";
+import Checkout from "./components/Checkout";
 import Footer from "./components/Footer";
 import Nav from "./components/Nav";
-import Checkout from "./components/Checkout";
-// Material-UI
-import CssBaseline from "@material-ui/core/CssBaseline";
-import {
-    createMuiTheme,
-    ThemeProvider,
-    makeStyles,
-} from "@material-ui/core/styles";
+
+// Context
+import { DrawerContext } from "./DrawerContext";
+
+// Styling
+import variables from "./styles";
+const { muiTheme } = variables;
+
 // Other packages/modules
 import axios from "axios";
-// Local
-import { DrawerContext } from "./DrawerContext";
-import variables from "./styles";
-import LoggedOutDrawer from "./components/drawers/LoggedOutDrawer";
+
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 // Overrides Material-Ui Base Styling
-const theme = createMuiTheme({
-    palette: {
-        primary: {
-            light: "#3c2e75",
-            main: "#080849",
-            dark: "#000023",
-        },
-        secondary: {
-            light: "#e5adff",
-            main: "#b17de8",
-            dark: "#7f4fb5",
-        },
-    },
-});
+const theme = createMuiTheme(muiTheme);
 const App = () => {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
     const [user, setUser] = useState({});
@@ -52,6 +46,7 @@ const App = () => {
         customizeShop: false,
     });
     const [visibility, setVisibility] = useState(false);
+    const [submit, setSubmit] = useState(false);
 
     // Check if user is logged in and set their cart in state, else check if cart exists for non-user and set cart in state
 
@@ -104,17 +99,32 @@ const App = () => {
         }
     };
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
+
     return (
-        // <div className={ classes.root }>
         <ThemeProvider theme={theme}>
             <CssBaseline>
                 <DrawerContext.Provider
-                    value={{ drawer, setDrawer, toggleDrawer, cart, setCart }}
+                    value={{
+                        setVisibility,
+                        toggleDrawer,
+                        visibility,
+                        setDrawer,
+                        setCart,
+                        drawer,
+                        cart,
+                    }}
                 >
                     <div id="app">
                         <Nav />
-                        <CartDrawer setVisibility={setVisibility} />
-                        <LoggedOutDrawer />
+                        <CartDrawer />
+
+                        <AccountDrawer submit={submit} setSubmit={setSubmit} />
+                        {submit ? (
+                            <SignUpModal
+                                submit={submit}
+                                setSubmit={setSubmit}
+                            />
+                        ) : null}
 
                         {visibility ? (
                             <Checkout setVisibility={setVisibility} />
@@ -129,7 +139,6 @@ const App = () => {
                 </DrawerContext.Provider>
             </CssBaseline>
         </ThemeProvider>
-        // </div>
     );
 };
 /*-------------------------------------------------------------- Render ------------------------------------------------------------------*/

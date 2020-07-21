@@ -1,58 +1,46 @@
-import React from "react";
-import { useState, useEffect, useContext } from "react";
-import { Grid, Typography } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
+// ./src/components/ProductCard.js
+
+/*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
+
+// React
+import React, { useState, useEffect, useContext } from "react";
+
+// Material-UI Components
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import { makeStyles } from "@material-ui/core/styles";
+import { Grid, Typography } from "@material-ui/core";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Rating from "@material-ui/lab/Rating";
-import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+
+// Styling
+import variables from "../styles";
+const { productCardStyling } = variables;
+
+// Other packages/modules
 import axios from "axios";
 import { DrawerContext } from "./../DrawerContext";
 
-const BASE_URL = "http://localhost:3000/api";
+/*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
-const useStyles = makeStyles({
-    cardSize: {
-        height: "100%",
-    },
-    productTitle: {
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingRight: 10,
-        paddingLeft: 10,
-        background: "#ad77eb",
-        color: "#ffffff",
-    },
-    productPrice: {},
-    productMedia: {
-        padding: 10,
-    },
-    productContent: {
-        padding: 10,
-        justifyContent: "center",
-    },
-    ratingContainer: {
-        justifyContent: "center",
-        paddingTop: 5,
-    },
-    cardButtons: {
-        justifyContent: "center",
-    },
-});
+const useStyles = makeStyles(productCardStyling);
+
+/*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
 const userId = 1;
 
 function ProductCards({ cart, setCart }) {
+    /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
+
     const [products, setProducts] = useState([]);
-    // const [selectedCard, setSelectedCard] = userState;
 
     //Get all products by this user and store in a userState
     useEffect(() => {
         axios
-            .get(BASE_URL + `/users/products/${userId}`)
+            .get(`api/users/products/${userId}`)
             .then((res) => {
                 setProducts(res.data.userProducts);
             })
@@ -62,13 +50,17 @@ function ProductCards({ cart, setCart }) {
             });
     }, []);
 
+    /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
+
     const classes = useStyles();
+
+    /*-------------------------------------------------------------- Helper Functions ------------------------------------------------------------------*/
 
     async function createUserCart(product) {
         // setCart([...cart, product.id]);
 
         try {
-            const { data } = await axios.post(BASE_URL + `/carts/create/`, {
+            const { data } = await axios.post(`api/carts/create/`, {
                 userId: userId,
                 productId: product.id,
                 priceTotal: product.price,
@@ -160,7 +152,8 @@ function ProductCards({ cart, setCart }) {
         );
     };
 
-    console.log("cart at bottom of productcard is ", cart);
+    /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
+
     return (
         <Grid container spacing={8} justify="center">
             {products.map((product, idx) => (
@@ -171,5 +164,7 @@ function ProductCards({ cart, setCart }) {
         </Grid>
     );
 }
+
+/*-------------------------------------------------------------- Exports ------------------------------------------------------------------*/
 
 export default ProductCards;

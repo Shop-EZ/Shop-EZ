@@ -1,14 +1,19 @@
-// ./src/components/accordions/inputs/BorderedInput
+// ./src/components/drawers/accordions/inputs/BorderedInput
 
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
+// React
 import React, { useState } from "react";
 
+// Material-UI Components
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
+// Styling
 import variables from "../../../../styles";
 const { inputStyling } = variables;
+
+/*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
 function BorderedInput({
     name,

@@ -60,6 +60,7 @@ const {
     deleteOrderFromUser,
     deactivateProduct,
     deactivateUser,
+    insertImagetoDB,
 } = require("./index");
 
 /*---------------------------------- Functions ---------------------------------------*/
@@ -519,6 +520,14 @@ async function createTables() {
                 comment TEXT NOT NULL
             );`);
 
+        //Images Table
+        await client.query(`
+            CREATE TABLE images (
+            id SERIAL PRIMARY KEY,
+            "imgName" TEXT,
+            img BYTEA
+        );`);
+
         console.log(chalk.greenBright("Finished creating tables!"));
     } catch (error) {
         console.error(
@@ -554,6 +563,7 @@ async function dropTables() {
         DROP TABLE IF EXISTS user_products;
         DROP TABLE IF EXISTS products;
         DROP TABLE IF EXISTS users;
+        DROP TABLE IF EXISTS images;
         `);
 
         console.log(chalk.greenBright("Finished dropping tables!"));
@@ -1015,6 +1025,28 @@ async function createInitialOrders() {
         throw error;
     }
 }
+
+//CreateTestImage to DB
+async function createTestImage() {
+    console.log(chalk.yellow("Creating image test"));
+    try {
+        const newImageInsert = await insertImagetoDB({
+            imgName: "TestImage",
+            image:
+                "/Users/fishyohangar/Desktop/Bootcamp/curriculum/Shop-EZ-master/public/assets/logo.png",
+        });
+
+        console.log("Test image ", newImageInsert);
+
+        console.log(chalk.green("Finished image test"));
+
+        return newImageInsert;
+    } catch (error) {
+        console.error("Error creating test image", error);
+        throw error;
+    }
+}
+
 //Connects to client, then drops and rebuilds all tables with initial seed data
 async function bootstrap() {
     try {
@@ -1029,6 +1061,7 @@ async function bootstrap() {
         await createInitialReviews();
         await createInitialCarts();
         await createInitialOrders();
+        await createTestImage();
     } catch (error) {
         console.error(
             "Error bootstrapping in ./db/seed.js at bootstrap(). Error: ",

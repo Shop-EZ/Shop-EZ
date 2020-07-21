@@ -18,4 +18,5 @@ module.exports = {
     ...require("./product_reviews"),
     ...require("./user_orders"),
     ...require("./user_products"),
+    ...require("./images.js"),
 };

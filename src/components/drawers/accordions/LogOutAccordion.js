@@ -1,38 +1,37 @@
-// ./src/components/accordions/LogOutAccordion.js
+// ./src/components/drawers/accordions/LogOutAccordion.js
 
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
-import React, { useState } from "react";
+// React
+import React from "react";
 
+// Material-UI Components
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Accordion from "@material-ui/core/Accordion";
 import ListItem from "@material-ui/core/ListItem";
 
+// Styling
 import variables from "../../../styles";
 const { accordionStyling } = variables;
-
-import axios from "axios";
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
 function LogOutAccordion() {
-    /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
-
-    const [expanded, setExpanded] = useState(false);
-
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
     const useStyles = makeStyles(accordionStyling);
     const classes = useStyles();
-    const { accordionRoot, headerTitle, accordion, logOut, listItem } = classes;
+    const {
+        accountAccordion,
+        accountListItem,
+        accordionRoot,
+        headerTitle,
+        logOut,
+    } = classes;
 
     /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
-
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
 
     const handleLogOut = () => {
         console.log("logging out...");
@@ -43,17 +42,12 @@ function LogOutAccordion() {
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
     return (
-        <ListItem className={listItem}>
-            <Accordion
-                // @ts-ignore
-                expanded={expanded === `panelLogIn`}
-                onChange={handleChange(`panelLogIn`)}
-                classes={{ root: accordionRoot }}
-            >
+        <ListItem className={accountListItem}>
+            <Accordion classes={{ root: accordionRoot }}>
                 <AccordionSummary
-                    aria-controls={`panelbh-content`}
-                    id={`panelbh-header`}
-                    className={`${accordion} ${logOut}`}
+                    aria-controls={`paneleh-content`}
+                    id={`paneleh-header`}
+                    className={`${accountAccordion} ${logOut}`}
                     onClick={handleLogOut}
                 >
                     <Typography

@@ -1,17 +1,23 @@
-// ./src/components/accordions/inputs/PasswordInput
+// ./src/components/drawers/accordions/inputs/PasswordInput
 
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
+// React
 import React, { useState } from "react";
 
+// Material-UI Components
 import InputAdornment from "@material-ui/core/InputAdornment";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Visibility from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+
+// Styling
 import variables from "../../../../styles";
 const { inputStyling } = variables;
+
+/*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
 function PasswordInput({ value, onChange }) {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
