@@ -96,7 +96,7 @@ function SignUpAccordion({ submit, setSubmit }) {
                     showPassword: false,
                 });
                 setSubmit(true);
-                toggleDrawer("accountLoggedOut");
+                toggleDrawer("account");
             } else {
                 console.log("An error has occurred.");
             }

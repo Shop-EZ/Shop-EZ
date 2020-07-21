@@ -34,12 +34,6 @@ const createReview = async ({ productId, userId, title, rating, comment }) => {
             [productId, userId, title, rating, comment]
         );
 
-        //Add new review to product in product_reviews table
-        const reviewProductResult = await addReviewToProduct(
-            review.productId,
-            review.id
-        );
-
         return review;
     } catch (error) {
         console.error(
@@ -52,13 +46,6 @@ const createReview = async ({ productId, userId, title, rating, comment }) => {
 // Deletes a review from the reviews table, and return the deleted review object
 const deleteReview = async (reviewId) => {
     try {
-        const productReviewObj = await getProductReviewByReviewId(reviewId);
-        if (productReviewObj) {
-            const removedReview = await removeReviewFromProduct(
-                productReviewObj.id
-            );
-        }
-
         const {
             rows: [deletedReview],
         } = await client.query(
@@ -81,7 +68,6 @@ const deleteReview = async (reviewId) => {
 
 // Updates a review in the reviews table, and return the updated review object
 const updateReview = async (reviewId, fields = {}) => {
-    console.log("fields", fields);
     const setString = Object.keys(fields)
         .map((key, index) => `"${key}"=$${index + 1}`)
         .join(", ");

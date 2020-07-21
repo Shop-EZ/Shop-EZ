@@ -40,7 +40,7 @@ productsRouter.post("/newproduct", requireUser, async function (
         name,
         description,
         price,
-        quantity,
+        qtyAvailable,
         delivery,
         rating,
         userId,
@@ -52,16 +52,18 @@ productsRouter.post("/newproduct", requireUser, async function (
     productData.name = name;
     productData.description = description;
     productData.price = price;
-    productData.quantity = quantity;
+    productData.qtyAvailable = qtyAvailable;
     productData.delivery = delivery;
     productData.rating = rating;
     productData.userId = userId;
     productData.categoryId = categoryId;
-    const newProduct = await createProduct(productData);
 
     try {
+        const newProduct = await createProduct(productData);
         if (newProduct) {
             res.send({ message: "Product Created!", newProduct });
+        } else {
+            res.send({ message: "Error Creating Product. " });
         }
     } catch (error) {
         console.error(error);
@@ -82,7 +84,7 @@ productsRouter.patch("/update/:productId", requireUser, async function (
         name,
         description,
         price,
-        quantity,
+        qtyAvailable,
         delivery,
         rating,
     } = req.body;
@@ -97,8 +99,8 @@ productsRouter.patch("/update/:productId", requireUser, async function (
     if (price) {
         updateFields.price = price;
     }
-    if (quantity) {
-        updateFields.quantity = quantity;
+    if (qtyAvailable) {
+        updateFields.quantity = qtyAvailable;
     }
     if (delivery) {
         updateFields.delivery = delivery;

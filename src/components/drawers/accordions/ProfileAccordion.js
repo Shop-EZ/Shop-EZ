@@ -1,4 +1,4 @@
-// ./src/components/drawers/accordions/SettingsAccordion
+// ./src/components/drawers/accordions/ProfileAccordion
 
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
@@ -19,7 +19,7 @@ const { accordionStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-function SettingsAccordion() {
+function ProfileAccordion() {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
     const [expanded, setExpanded] = useState(false);
@@ -54,8 +54,8 @@ function SettingsAccordion() {
                 classes={{ root: accordionRoot }}
             >
                 <AccordionSummary
-                    aria-controls={`paneldh-content`}
-                    id={`paneldh-header`}
+                    aria-controls={`panelfh-content`}
+                    id={`panelfh-header`}
                     className={accountAccordion}
                 >
                     <Typography
@@ -63,7 +63,7 @@ function SettingsAccordion() {
                         variant="h3"
                         className={headerTitle}
                     >
-                        Settings
+                        Profile
                     </Typography>
                 </AccordionSummary>
 
@@ -79,4 +79,4 @@ function SettingsAccordion() {
 
 /*-------------------------------------------------------------- Exports ------------------------------------------------------------------*/
 
-export default SettingsAccordion;
+export default ProfileAccordion;

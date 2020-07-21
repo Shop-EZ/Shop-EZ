@@ -28,6 +28,8 @@ function CartHeader({ quantity, name, price, index }) {
         cartAccordion,
     } = classes;
 
+    const totalPrice = Number(price) * Number(quantity);
+
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
     return (
@@ -51,9 +53,7 @@ function CartHeader({ quantity, name, price, index }) {
                     className={cartHeaderPrice}
                 >
                     {/* If price is not already formatted as a decimal, add ".00" to it */}
-                    {`$${
-                        +price === Math.floor(+price) ? `${+price}.00` : price
-                    } `}
+                    {price}
                 </Typography>
             </div>
         </AccordionSummary>

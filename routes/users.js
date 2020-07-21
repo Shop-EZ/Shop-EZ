@@ -140,6 +140,7 @@ usersRouter.post("/login", async function (req, res, next) {
                         firstName,
                         lastName,
                         id,
+                        username,
                     });
                 } else {
                     return next({
@@ -158,15 +159,23 @@ usersRouter.post("/login", async function (req, res, next) {
 });
 
 //Post User Tokens Route---------------------------------In Progress
-usersRouter.post("/token", async function (req, rest, next) {
+usersRouter.post("/token", async function (req, res, next) {
     const { token } = req.body;
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        if (decodedToken) {
-            const id = decoded.id;
-        }
+        res.send({
+            name: "TokenVerified",
+            message: "The token sent has been verified. Welcome back!",
+            decodedToken,
+        });
     } catch (error) {
         const { name, message } = error;
+        if (name === "JsonWebTokenError") {
+            next({
+                name: "TokenNotVerified",
+                message: "The token sent could not be verified",
+            });
+        }
         next({ name, message });
     }
 });
@@ -263,11 +272,18 @@ usersRouter.get("/cart/:userId", async function (req, res, next) {
         if (userExists) {
             const userCart = await getCartByUserId(userId);
 
-            res.send({
-                name: "UserCartObtained",
-                message: "The cart for that user was found. See attached",
-                userCart,
-            });
+            if (userCart) {
+                res.send({
+                    name: "UserCartObtained",
+                    message: "The cart for that user was found. See attached",
+                    userCart,
+                });
+            } else {
+                next({
+                    name: "CartNotFound",
+                    message: "No active cart was found for this user.",
+                });
+            }
         } else {
             next({
                 name: "UserNotFound",

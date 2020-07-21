@@ -1,4 +1,4 @@
-// ./src/components/drawers/accordions/SettingsAccordion
+// ./src/components/drawers/accordions/StoreAccordion
 
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
@@ -19,7 +19,7 @@ const { accordionStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-function SettingsAccordion() {
+function StoreAccordion() {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
     const [expanded, setExpanded] = useState(false);
@@ -63,7 +63,7 @@ function SettingsAccordion() {
                         variant="h3"
                         className={headerTitle}
                     >
-                        Settings
+                        Create Store
                     </Typography>
                 </AccordionSummary>
 
@@ -79,4 +79,4 @@ function SettingsAccordion() {
 
 /*-------------------------------------------------------------- Exports ------------------------------------------------------------------*/
 
-export default SettingsAccordion;
+export default StoreAccordion;

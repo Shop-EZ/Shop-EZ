@@ -7,7 +7,6 @@ const chalk = require("chalk");
 const client = require("./client");
 const {
     createUser,
-    createOrder,
     createProduct,
     createReview,
     createCart,
@@ -18,7 +17,6 @@ const {
     getAllUsers,
     updateUser,
     deleteUser,
-    updateCart,
     deleteCart,
     getCartByUserId,
     updateCategory,
@@ -26,10 +24,6 @@ const {
     getAllCategories,
     getCategoryById,
     getCategoryByName,
-    updateOrder,
-    deleteOrder,
-    getAllOrders,
-    getOrderById,
     getAllProducts,
     getProductById,
     getProductByName,
@@ -50,17 +44,11 @@ const {
     getProductsByCartId,
     addCategoryToProduct,
     removeCategoryFromProduct,
-    addProductToOrder,
-    removeProductFromOrder,
-    addReviewToProduct,
-    removeReviewFromProduct,
     addProductToUser,
     deleteProductFromUser,
-    addOrderToUser,
-    deleteOrderFromUser,
     deactivateProduct,
     deactivateUser,
-    insertImagetoDB,
+    getProductsByUserId,
 } = require("./index");
 
 /*---------------------------------- Functions ---------------------------------------*/
@@ -73,243 +61,201 @@ async function testDB() {
         // Users table functions
         console.log(chalk.cyan("Testing Users table functions"));
 
-        // console.log(chalk.magenta('Testing updateUser...'));
-        // const updatedUser = await updateUser(1, {
-        //     email: 'tony.dyleuth@anotherexample.com',
-        //     "shopName": 'The Tonynator',
-        //     public: false
-        // });
-        // console.log(chalk.green('updateUser result: '), updatedUser);
+        console.log(chalk.magenta("Testing updateUser..."));
+        const updatedUser = await updateUser(1, {
+            email: "tony.dyleuth@anotherexample.com",
+            shopName: "The Tonynator",
+            public: false,
+        });
+        console.log(chalk.green("updateUser result: "), updatedUser);
 
-        // console.log(chalk.magenta('Testing deactivateUser...'));
-        // const deactivatedUser = await deactivateUser(4);
-        // console.log(chalk.green('deactiveUser result: '), deactivatedUser);
+        console.log(chalk.magenta("Testing deactivateUser..."));
+        const deactivatedUser = await deactivateUser(4);
+        console.log(chalk.green("deactiveUser result: "), deactivatedUser);
 
-        // console.log(chalk.magenta('Testing deleteUser...'));
-        // const deletedUser = await deleteUser(4);
-        // console.log(chalk.green('deleteUser result: '), deletedUser);
+        console.log(chalk.magenta("Testing deleteUser..."));
+        const deletedUser = await deleteUser(4);
+        console.log(chalk.green("deleteUser result: "), deletedUser);
 
-        // console.log(chalk.magenta('Testing getAllUsers...'));
-        // const allUsers = await getAllUsers();
-        // console.log(chalk.green('getAllUsersResult: '), allUsers);
+        console.log(chalk.magenta("Testing getAllUsers..."));
+        const allUsers = await getAllUsers();
+        console.log(chalk.green("getAllUsersResult: "), allUsers);
 
-        // console.log(chalk.magenta('Testing getUserById... '));
-        // const userById = await getUserById(3);
-        // console.log(chalk.green('getUserById result: '), userById);
+        console.log(chalk.magenta("Testing getUserById... "));
+        const userById = await getUserById(3);
+        console.log(chalk.green("getUserById result: "), userById);
 
-        // console.log(chalk.magenta('Testing getUserByUserName'));
-        // const userByUsername = await getUserByUserName('caleb_rocks');
-        // console.log(chalk.green('getUserByUserName result: '), userByUsername);
+        console.log(chalk.magenta("Testing getUserByUserName"));
+        const userByUsername = await getUserByUserName("caleb_rocks");
+        console.log(chalk.green("getUserByUserName result: "), userByUsername);
 
-        // // Products table functions
-        // console.log(chalk.cyan('Testing Products table functions'));
+        // Products table functions
+        console.log(chalk.cyan("Testing Products table functions"));
 
-        // console.log('Testing getAllProducts')
-        // const allProducts = await getAllProducts()
-        // console.log("getAllProducts results", allProducts)
+        console.log(chalk.magenta("Testing getAllProducts)"));
+        const allProducts = await getAllProducts();
+        console.log(chalk.green("getAllProducts results"), allProducts);
 
-        // console.log("Testing getProductsById")
-        // const getProductByIdResults = await getProductById(4)
-        // console.log("GetProductById result", getProductByIdResults)
+        console.log("Testing getProductsById");
+        const getProductByIdResults = await getProductById(4);
+        console.log("GetProductById result", getProductByIdResults);
 
-        // console.log("Testing getProductsByName")
-        // const getProductByNameResults = await getProductByName("Turntables")
-        // console.log("GetProductByName result", getProductByNameResults)
+        console.log("Testing getProductsByName");
+        const getProductByNameResults = await getProductByName("Pet Rock");
+        console.log("GetProductByName result", getProductByNameResults);
 
-        // console.log("Testing updateProduct")
-        // const updateProductResult = await updateProduct(2, {
-        //     name: "Human Rock",
-        //     description:"A human rock"
-        // })
-        // console.log("updateProduct result", updateProductResult)
+        console.log("Testing updateProduct");
+        const updateProductResult = await updateProduct(1, {
+            name: "Human Rock",
+            description: "A human rock",
+        });
+        console.log("updateProduct result", updateProductResult);
 
-        // console.log("Testing deactivateProduct")
-        // const deactivateProductResult = await deactivateProduct(2)
-        // console.log("deactivateProduct result", deactivateProductResult);
+        console.log("Testing deactivateProduct");
+        const deactivateProductResult = await deactivateProduct(1);
+        console.log("deactivateProduct result", deactivateProductResult);
 
-        // console.log("Testing getAllProductsByUserId")
-        // const geAllProductsByUserIdResults = await getAllProductsByUserId(4)
-        // console.log("getAllProductsByUserId result", geAllProductsByUserIdResults)
+        console.log("Testing deleteProduct");
+        const deletedProduct = await deleteProduct(1);
+        console.log("deletedProduct is ", deletedProduct);
 
-        // // Order table functions
-        // console.log(chalk.cyan('Testing Orders table functions'));
+        console.log("Testing getProductsByUserId");
+        const geAllProductsByUserIdResults = await getProductsByUserId(3);
+        console.log("getProductsByUserId result", geAllProductsByUserIdResults);
 
-        // console.log('Testing deleteOrder')
-        // const deletedOrder = await deleteOrder(1)
-        // console.log("DeleteOrder results", deletedOrder)
+        // Cart table functions
+        console.log("Testing Carts table functions");
 
-        // console.log('Testing getAllOrders')
-        // const allOrders = await getAllOrders()
-        // console.log("getAllOrders results", allOrders)
+        //COLUMN PRODUCTS DOESNT EXIST
 
-        // console.log('Testing getOrderById')
-        // const orderByIdResult = await getOrderById(2)
-        // console.log("getOrderById results", orderByIdResult)
+        console.log("Testing deleteCart...");
+        const deletedCart = await deleteCart(1);
+        console.log("deleteCart result: ", deletedCart);
 
-        // console.log('Testing getOrderByUserId')
-        // const orderByIdUserResult = await getOrderByUserId(3)
-        // console.log("getOrderByUserId results", orderByIdUserResult)
+        console.log("Testing getCartByUserId...");
+        const userCart = await getCartByUserId(2);
+        console.log("getCartByUserId result: ", userCart);
 
-        // // Cart table functions
-        // console.log('Testing Carts table functions');
+        // Categories table functions
+        console.log(chalk.cyan("Testing Categories table functions"));
 
-        // console.log('Testing updateCart...');
-        // const updatedCart = await updateCart(2, { products: '{2, 3, 4}' });
-        // console.log('updateCart result: ', updatedCart);
+        console.log("Testing updateCategory...");
+        const updatedCategory = await updateCategory(2, { name: "Fun" });
+        console.log("updateCategory result: ", updatedCategory);
 
-        // console.log('Testing deleteCart...');
-        // const deletedCart = await deleteCart(1);
-        // console.log('deleteCart result: ', deletedCart);
+        //FOREIGN KEY VIOLATION CATEGORY PRODUCTS
 
-        // console.log('Testing getCartByUserId...');
-        // const userCart = await getCartByUserId(2);
-        // console.log('getCartByUserId result: ', userCart);
+        console.log("Testing deleteCategory...");
+        const deletedCategory = await deleteCategory(2);
+        console.log("deleteCategory result is ", deletedCategory);
 
-        // // Categories table functions
-        // console.log(chalk.cyan('Testing Categories table functions'));
+        console.log("Testing getAllCategories...");
+        const allCategories = await getAllCategories();
+        console.log("getAllCategories result is ", allCategories);
 
-        // console.log('Testing updateCategory...');
-        // const updatedCategory = await updateCategory(2, {name: 'Fun'});
-        // console.log('updateCategory result: ', updatedCategory);
+        console.log("Testing getCategoryById...");
+        const categoryById = await getCategoryById(1);
+        console.log("getCategoryById result is ", categoryById);
 
-        // console.log('Testing deleteCategory...');
-        // const deletedCategory = await deleteCategory(2);
-        // console.log('deleteCategory result is ', deletedCategory);
+        console.log("Testing getCategoryByName");
+        const categoryByName = await getCategoryByName("music");
+        console.log("getCategoryByName result is ", categoryByName);
 
-        // console.log('Testing getAllCategories...');
-        // const allCategories = await getAllCategories();
-        // console.log('getAllCategories result is ', allCategories);
+        // Shops table functions
+        console.log(chalk.cyan("Testing Shops table functions"));
 
-        // console.log('Testing getCategoryById...');
-        // const categoryById = await getCategoryById(1);
-        // console.log('getCategoryById result is ', categoryById);
+        console.log("Testing updateShop");
+        const updatedShopResult = await updateShop(1, {
+            userId: 3,
+            name: "Caleb's Shop",
+            products: "{4}",
+        });
+        console.log("updateShop Result", updatedShopResult);
 
-        // console.log('Testing getCategoryByName');
-        // const categoryByName = await getCategoryByName('music');
-        // console.log('getCategoryByName result is ', categoryByName);
+        console.log("Testing DeleteShop");
+        const deleteShopresult = await deleteShop(2);
+        console.log("DeleteShop Result ", deleteShopresult);
 
-        // // Shops table functions
-        // console.log(chalk.cyan('Testing Shops table functions'));
+        console.log("Testing getAllShops");
+        const getAllShopresult = await getAllShops();
+        console.log("AllShop Result ", getAllShopresult);
 
-        // console.log("Testing updateShop")
-        // const updatedShopResult = await updateShop(1, {
-        //     userId:4,
-        //     name:"Caleb's Shop",
-        //     products: '{4}'
-        // })
-        // console.log("updateShop Result", updatedShopResult)
+        console.log("Testing getShopById...");
+        const getShopByIdResult = await getShopById(1);
+        console.log("getShopById result: ", getShopByIdResult);
 
-        // console.log("Testing DeleteShop")
-        // const deleteShopresult = await deleteShop(2)
-        // console.log("DeleteShop Result ", deleteShopresult)
+        console.log("Testing getShopByUserId...");
+        const getShopByUserIdResult = await getShopByUserId(3);
+        console.log("getShopByUserId result: ", getShopByUserIdResult);
 
-        // console.log("Testing getAllShops")
-        // const getAllShopresult = await getAllShops()
-        // console.log("AllShop Result ", getAllShopresult)
+        // Reviews table functions
+        console.log(chalk.cyan("Testing Reviews table functions"));
 
-        // console.log('Testing getShopById...');
-        // const getShopByIdResult = await getShopById(1);
-        // console.log('getShopById result: ', getShopByIdResult);
+        console.log("Testing deleteReview...");
+        const deletedReview = await deleteReview(3);
+        console.log("deleteReview result: ", deletedReview);
 
-        // console.log('Testing getShopByUserId...');
-        // const getShopByUserIdResult = await getShopByUserId(4);
-        // console.log('getShopByUserId result: ', getShopByUserIdResult);
+        console.log("Testing getReviewsByProductId...");
+        const reviewByProdId = await getReviewsByProductId(3);
+        console.log("getReviewsByProductId result: ", reviewByProdId);
 
-        // // Reviews table functions
-        // console.log(chalk.cyan('Testing Reviews table functions'));
+        console.log("Testing getReviewsByUserId...");
+        const reviewByUserId = await getReviewsByUserId(2);
+        console.log("getReviewsByUserId result: ", reviewByUserId);
 
-        // console.log("Testing deleteReview...");
-        // const deletedReview = await deleteReview(2);
-        // console.log('deleteReview result: ', deletedReview);
+        console.log("Testing updateReview...");
+        const updatedReview = await updateReview(4, {
+            title: "This rock ROCKS YOUR SOCKS OFF OKAY!!!!",
+            comment:
+                "I purchased this rock a week ago and was completely blown away. Not only does it actually rock, this rock also totally ROCKS!!! EDIT: It's been two months now and let me tell you, this rock has literally changed my life. Everything is amazing. If you haven't gotten one yet, you're missing out.",
+        });
+        console.log("updateReview result:", updatedReview);
 
-        // console.log('Testing getReviewsByProductId...');
-        // const reviewByProdId = await getReviewsByProductId(1);
-        // console.log('getReviewsByProductId result: ', reviewByProdId);
+        // Cart_products table functions
+        console.log(chalk.cyan("Testing Cart_products table functions"));
 
-        // console.log('Testing getReviewsByUserId...');
-        // const reviewByUserId = await getReviewsByUserId(1);
-        // console.log('getReviewsByUserId result: ', reviewByUserId);
+        //COLUMN PRICETOTAL OF CART PRODUCTS RELATION DOESNT EXIST
 
-        // console.log('Testing updateReview...');
-        // const updatedReview = await updateReview(1, {
-        //     title: 'This rock ROCKS YOUR SOCKS OFF OKAY!!!!',
-        //     comment: "I purchased this rock a week ago and was completely blown away. Not only does it actually rock, this rock also totally ROCKS!!! EDIT: It's been two months now and let me tell you, this rock has literally changed my life. Everything is amazing. If you haven't gotten one yet, you're missing out."
-        // });
-        // console.log('updateReview result:', updatedReview);
+        console.log("Testing addProductToCart...");
+        const addedCartProduct = await addProductToCart(1, 2);
+        console.log("addProductToCart result: ", addedCartProduct);
 
-        // // Cart_products table functions
-        // console.log(chalk.cyan('Testing Cart_products table functions'));
+        console.log("Testing getCartProductById...");
+        const cartByProdId = await getCartProductById(6);
+        console.log("getCartProductById result: ", cartByProdId);
 
-        // console.log('Testing addProductToCart...');
-        // const addedCartProduct = await addProductToCart(1, 1);
-        // console.log('addProductToCart result: ', addedCartProduct);
+        console.log("Testing getProductsByCartId...");
+        const productsByCartId = await getProductsByCartId(2);
+        console.log("getProductsByCartId result: ", productsByCartId);
 
-        // console.log('Testing getCartProductById...');
-        // const cartByProdId = await getCartProductById(9);
-        // console.log('getCartProductById result: ', cartByProdId);
+        console.log("Testing removeProductFromCart...");
+        const removedCartProduct = await removeProductFromCart(6);
+        console.log("removeProductFromCart result: ", removedCartProduct);
 
-        // console.log('Testing getProductsByCartId...');
-        // const productsByCartId = await getProductsByCartId(1);
-        // console.log('getProductsByCartId result: ', productsByCartId);
+        // Category_products table functions
+        console.log(chalk.cyan("Testing category_products table functions"));
 
-        // console.log('Testing removeProductFromCart...');
-        // const removedCartProduct = await removeProductFromCart(1);
-        // console.log('removeProductFromCart result: ', removedCartProduct);
+        console.log("Testing addCategoryToProduct...");
+        const prodCategory = await addCategoryToProduct(3, 3);
+        console.log("addCategoryToProduct result: ", prodCategory);
 
-        // // Category_products table functions
-        // console.log(chalk.cyan('Testing category_products table functions'));
+        console.log("Testing removeCategoryFromProduct...");
+        const deletedProdCategory = await removeCategoryFromProduct(4);
+        console.log("removeCategoryFromProduct result: ", deletedProdCategory);
 
-        // console.log('Testing addCategoryToProduct...');
-        // const prodCategory = await addCategoryToProduct(2, 2);
-        // console.log('addCategoryToProduct result: ', prodCategory);
+        // User_product table functions
+        console.log(chalk.cyan("Testing user_products table functions..."));
 
-        // console.log('Testing removeCategoryFromProduct...');
-        // const deletedProdCategory = await removeCategoryFromProduct(2);
-        // console.log('removeCategoryFromProduct result: ', deletedProdCategory);
+        console.log(chalk.magenta("Testing addProductToUser"));
+        const userProduct = await addProductToUser(3, 1);
+        console.log(chalk.green("addProductToUser result: "), userProduct);
 
-        // //Order_products table functions
-        // console.log(chalk.cyan('Testing order_products table functions'));
-
-        // console.log('Testing addProductToOrder...');
-        // const orderProd = await addProductToOrder(1, 1);
-        // console.log('addProductToOrder result: ', orderProd);
-
-        // console.log('Testing removeProductFromOrder...');
-        // const removedOrderProd = await removeProductFromOrder(1);
-        // console.log('removeProductFromOrder result: ', removedOrderProd);
-
-        // //Product_reviews table functions
-        // console.log(chalk.cyan('Testing product_reviews table functions'));
-
-        // console.log(chalk.magenta('Testing addReviewToProduct...'));
-        // const newReview = await addReviewToProduct(1, 1);
-        // console.log(chalk.green('addReviewToProduct result:'), newReview);
-
-        // console.log(chalk.magenta('Testing removeReviewFromProduct...'));
-        // const removedReview = await removeReviewFromProduct(1);
-        // console.log(chalk.green('removeReviewFromProduct result: '), removedReview);
-
-        // // User_product table functions
-        // console.log(chalk.cyan('Testing user_products table functions...'));
-
-        // console.log(chalk.magenta('Testing addProductToUser'));
-        // const userProduct = await addProductToUser(1, 1);
-        // console.log(chalk.green('addProductToUser result: '), userProduct);
-
-        // console.log(chalk.magenta('Testing deleteProductFromUser'));
-        // const removedUserProd = await deleteProductFromUser(1);
-        // console.log(chalk.green('deleteProductFromUser result: '), removedUserProd);
-
-        // // User_orders table functions
-        // console.log(chalk.cyan('Testing user_orders table functions...'));
-
-        // console.log(chalk.magenta('Testing addOrderToUser'));
-        // const userOrder = await addOrderToUser(1, 1);
-        // console.log(chalk.green('addOrderToUser result: '), userOrder);
-
-        // console.log(chalk.magenta('Testing deleteOrderFromUser'));
-        // const removedUserOrder = await deleteOrderFromUser(1);
-        // console.log(chalk.green('deleteOrderFromUser result: '), removedUserOrder);
+        console.log(chalk.magenta("Testing deleteProductFromUser"));
+        const removedUserProd = await deleteProductFromUser(4);
+        console.log(
+            chalk.green("deleteProductFromUser result: "),
+            removedUserProd
+        );
 
         console.log(chalk.greenBright("Finished db testing"));
     } catch (error) {
@@ -351,10 +297,10 @@ async function createTables() {
                 name VARCHAR(255) NOT NULL,
                 description TEXT NOT NULL,
                 price FLOAT(2) NOT NULL,
-                quantity INTEGER NOT NULL,
+                "qtyAvailable" INTEGER NOT NULL,
                 delivery TEXT [],
                 rating FLOAT(1),
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 "categoryId" INTEGER [],
                 active BOOLEAN DEFAULT true
             );`);
@@ -363,8 +309,8 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS user_products (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "productId" INTEGER REFERENCES products(id) NOT NULL
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "productId" INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE
             );`);
 
         //Categories table
@@ -378,8 +324,8 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS category_products(
                 id SERIAL PRIMARY KEY,
-                "categoryId" INTEGER REFERENCES categories(id) NOT NULL,
-                "productId" INTEGER REFERENCES products(id) NOT NULL
+                "categoryId" INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+                "productId" INTEGER  NOT NULL REFERENCES products(id) ON DELETE CASCADE
             );`);
 
         //TODO: Add media array
@@ -387,66 +333,29 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS reviews(
                 id SERIAL PRIMARY KEY,
-                "productId" INTEGER REFERENCES products(id) NOT NULL,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
+                "productId" INTEGER  NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 title VARCHAR(255),
                 rating INTEGER NOT NULL,
                 comment TEXT NOT NULL
-            );`);
-
-        //Product_reviews join table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS product_reviews(
-                id SERIAL PRIMARY KEY,
-                "productId" INTEGER REFERENCES products(id) NOT NULL,
-                "reviewId" INTEGER REFERENCES reviews(id) NOT NULL
             );`);
 
         //Carts table (userId not required for non-users to be able to purchase)
         await client.query(`
             CREATE TABLE IF NOT EXISTS carts(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id)
+                "userId" INTEGER REFERENCES users(id) ON DELETE CASCADE
             );`);
 
         //Cart_products join table
         await client.query(`
             CREATE TABLE IF NOT EXISTS cart_products(
                 id SERIAL PRIMARY KEY,
-                "cartId" INTEGER REFERENCES carts(id) NOT NULL,
-                "productId" INTEGER REFERENCES products(id) NOT NULL,
-                 quantity INTEGER DEFAULT '1',
-                 priceTotal FLOAT(2) NOT NULL,
+                "cartId" INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
+                "productId" INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+                 "qtyDesired" INTEGER DEFAULT '1',
                  UNIQUE ("cartId","productId")
             
-            );`);
-
-        //TODO: Add support for receipt_id to table
-        //Orders table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS orders(
-                id SERIAL PRIMARY KEY,
-                products INTEGER [] NOT NULL,
-                "orderDate" DATE NOT NULL,
-                "orderTotal" FLOAT(2) NOT NULL,
-                "shippingAddress" VARCHAR(255) NOT NULL,
-                fulfilled BOOLEAN DEFAULT false
-            );`);
-
-        //User_orders join table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS user_orders(
-                id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "orderId" INTEGER REFERENCES orders(id) NOT NULL
-            );`);
-
-        //Order_products join table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS order_products(
-                id SERIAL PRIMARY KEY,
-                "orderId" INTEGER REFERENCES orders(id) NOT NULL,
-                "productId" INTEGER REFERENCES products(id) NOT NULL
             );`);
 
         //TODO: Add media array
@@ -454,7 +363,7 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS shops(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 name VARCHAR(255) UNIQUE NOT NULL,
                 products INTEGER [],
                 description TEXT
@@ -464,8 +373,7 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS receipts(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "orderId" INTEGER REFERENCES orders(id) NOT NULL,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 products INTEGER [] NOT NULL,
                 "orderDate" DATE NOT NULL,
                 "orderTotal" FLOAT(2) NOT NULL,
@@ -477,11 +385,10 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS support_messages(
                 id SERIAL PRIMARY KEY,
-                "customerUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "merchantUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "orderId" INTEGER REFERENCES orders(id),
-                "productId" INTEGER REFERENCES products(id),
-                "storeId" INTEGER REFERENCES shops(id),
+                "customerUserId" INTEGER  NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "merchantUserId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "productId" INTEGER REFERENCES products(id) ON DELETE CASCADE,
+                "storeId" INTEGER REFERENCES shops(id) ON DELETE CASCADE,
                 messages TEXT [] NOT NULL
             );`);
 
@@ -489,9 +396,9 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS user_support_messages(
                 id SERIAL PRIMARY KEY,
-                "customerUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "merchantUserId" INTEGER REFERENCES users(id) NOT NULL,
-                "interactionId" INTEGER REFERENCES support_messages(id) NOT NULL
+                "customerUserId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "merchantUserId" INTEGER  NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "interactionId" INTEGER  NOT NULL REFERENCES support_messages(id) ON DELETE CASCADE
             );`);
 
         //TODO: Add media array and figure out if there's a way to make one of three fields required
@@ -508,15 +415,15 @@ async function createTables() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS user_posts(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id) NOT NULL,
-                "postId" INTEGER REFERENCES posts(id) NOT NULL
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "postId" INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE
             );`);
 
         //Comments table
         await client.query(`
             CREATE TABLE IF NOT EXISTS comments(
                 id SERIAL PRIMARY KEY,
-                "postsId" INTEGER REFERENCES posts(id) NOT NULL,
+                "postsId" INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
                 comment TEXT NOT NULL
             );`);
 
@@ -553,9 +460,6 @@ async function dropTables() {
         DROP TABLE IF EXISTS shops;
         DROP TABLE IF EXISTS product_reviews;
         DROP TABLE IF EXISTS reviews;
-        DROP TABLE IF EXISTS order_products;
-        DROP TABLE IF EXISTS user_orders;
-        DROP TABLE IF EXISTS orders;
         DROP TABLE IF EXISTS cart_products;
         DROP TABLE IF EXISTS carts;
         DROP TABLE IF EXISTS category_products;
@@ -694,7 +598,7 @@ async function createInitialProducts() {
     //     name VARCHAR(255) NOT NULL,
     //     description TEXT NOT NULL,
     //     price FLOAT(2) NOT NULL,
-    //     quantity INTEGER NOT NULL,
+    //     qtyAvailable INTEGER NOT NULL,
     //     delivery TEXT [],
     //     rating FLOAT(1),
     //     "userId" INTEGER REFERENCES users(id) NOT NULL,
@@ -708,7 +612,7 @@ async function createInitialProducts() {
             description:
                 "A friendly rock found in Joshua Tree looking for a home",
             price: 300.99,
-            quantity: 1,
+            qtyAvailable: 1,
             delivery: '{"pickup"}',
             rating: 5.0,
             userId: 3,
@@ -720,7 +624,7 @@ async function createInitialProducts() {
             description:
                 "A pair of used Pioneer CDJ's in decent condition, perfect for getting your scratch on!",
             price: 450.99,
-            quantity: 2,
+            qtyAvailable: 2,
             delivery: '{"standard", "express", "next-day"}',
             rating: 3.5,
             userId: 4,
@@ -732,7 +636,7 @@ async function createInitialProducts() {
             description:
                 "One of a kind, hand-made embroidered dress from Egypt, perfect for weddings, parties, and other special occassions!",
             price: 60.0,
-            quantity: 50,
+            qtyAvailable: 50,
             delivery: '{"standard"}',
             rating: 5.0,
             userId: 2,
@@ -744,7 +648,7 @@ async function createInitialProducts() {
             description:
                 "A part-time course offered by the incredible Fullstack Academy of Code to get you coding in your dream job in 6-months",
             price: "11000.00",
-            quantity: 999,
+            qtyAvailable: 999,
             delivery: '{"electronic"}',
             rating: 5.0,
             userId: 1,
@@ -755,7 +659,7 @@ async function createInitialProducts() {
             name: "Java for Dummies Course",
             description: "A Java course offered to beginners of all ages",
             price: "99.00",
-            quantity: 100,
+            qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 3,
             userId: 1,
@@ -767,7 +671,7 @@ async function createInitialProducts() {
             description:
                 "A Mobile development course offered to beginners of all ages",
             price: "35.00",
-            quantity: 100,
+            qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 4.0,
             userId: 1,
@@ -779,7 +683,7 @@ async function createInitialProducts() {
             description:
                 "A course that teaches different ways to make passive income",
             price: "25.00",
-            quantity: 40,
+            qtyAvailable: 40,
             delivery: '{"electronic"}',
             rating: 2.0,
             userId: 1,
@@ -790,7 +694,7 @@ async function createInitialProducts() {
             name: "Entrepenuer Crash Course",
             description: "Learn to become an entrepenuer step by step",
             price: "65.00",
-            quantity: 100,
+            qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 4.0,
             userId: 1,
@@ -802,7 +706,7 @@ async function createInitialProducts() {
             description:
                 "Learn to become chef as little as 1 day with this course ",
             price: "100.00",
-            quantity: 100,
+            qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 3.0,
             userId: 1,
@@ -942,24 +846,24 @@ async function createInitialCarts() {
             userId: 1,
         });
 
-        // const nahidsCart = await createCart({
-        //     userId: 2,
-        //     products: "{2}",
-        // });
+        const nahidsCart = await createCart({
+            userId: 2,
+            products: [],
+        });
 
-        // const calebsCart = await createCart({
-        //     userId: 3,
-        //     products: "{3, 2}",
-        // });
+        const calebsCart = await createCart({
+            userId: 3,
+            products: [3, 2],
+        });
 
-        // const yahyasCart = await createCart({
-        //     userId: 4,
-        //     products: "{1, 4, 2}",
-        // });
+        const yahyasCart = await createCart({
+            userId: 4,
+            products: [1, 4, 2],
+        });
 
-        // const anonsCart = await createCart({
-        //     products: "{1, 2, 4}",
-        // });
+        const anonsCart = await createCart({
+            products: [1, 2, 4],
+        });
 
         console.log(chalk.greenBright("Finished creating initial carts!"));
     } catch (error) {
@@ -967,82 +871,6 @@ async function createInitialCarts() {
             "Error creating initial carts @ db/seed.js at createInitialCarts()! Error: ",
             error
         );
-        throw error;
-    }
-}
-//Creates seed data of initial orders
-async function createInitialOrders() {
-    // Reference
-    // id SERIAL PRIMARY KEY,
-    // "userId" INTEGER REFERENCES users(id) NOT NULL,
-    // products INTEGER [] NOT NULL,
-    // "orderDate" DATE NOT NULL,
-    // "orderTotal" FLOAT(2) NOT NULL,
-    // shippingAddress VARCHAR(255) NOT NULL,
-    // fulfilled BOOLEAN DEFAULT false
-
-    console.log(chalk.yellow("Creating initial orders..."));
-
-    try {
-        const rocks = await createOrder({
-            userId: 1,
-            products: "{1}",
-            orderDate: "2020-05-08",
-            orderTotal: 100.32,
-            shippingAddress: "12345 Street Ln., City, ST, 12345",
-        });
-
-        const clothes = await createOrder({
-            userId: 2,
-            products: "{1, 2}",
-            orderDate: "2020-05-08",
-            orderTotal: 52.22,
-            shippingAddress: "12345 Street Ln., City, ST, 12345",
-        });
-
-        const music = await createOrder({
-            userId: 3,
-            products: "{2, 3}",
-            orderDate: "2020-05-08",
-            orderTotal: 2.42,
-            shippingAddress: "12345 Street Ln., City, ST, 12345",
-        });
-
-        const curriculum = await createOrder({
-            userId: 4,
-            products: "{1, 2, 3}",
-            orderDate: "2020-05-08",
-            orderTotal: 11000.32,
-            shippingAddress: "12345 Street Ln., City, ST, 12345",
-        });
-
-        console.log(chalk.greenBright("Finished creating initial orders!"));
-    } catch (error) {
-        console.error(
-            "Error creating initial orders @ db/seed.js createInitialOrders()! Error: ",
-            error
-        );
-        throw error;
-    }
-}
-
-//CreateTestImage to DB
-async function createTestImage() {
-    console.log(chalk.yellow("Creating image test"));
-    try {
-        const newImageInsert = await insertImagetoDB({
-            imgName: "TestImage",
-            image:
-                "/Users/fishyohangar/Desktop/Bootcamp/curriculum/Shop-EZ-master/public/assets/logo.png",
-        });
-
-        console.log("Test image ", newImageInsert);
-
-        console.log(chalk.green("Finished image test"));
-
-        return newImageInsert;
-    } catch (error) {
-        console.error("Error creating test image", error);
         throw error;
     }
 }
@@ -1060,8 +888,6 @@ async function bootstrap() {
         await createInitialShops();
         await createInitialReviews();
         await createInitialCarts();
-        await createInitialOrders();
-        await createTestImage();
     } catch (error) {
         console.error(
             "Error bootstrapping in ./db/seed.js at bootstrap(). Error: ",
@@ -1073,6 +899,6 @@ async function bootstrap() {
 /*---------------------------------- Run-Time ---------------------------------------*/
 
 bootstrap()
-    .then(testDB)
-    .catch(console.error)
-    .finally(() => client.end());
+    // .then(testDB)
+    .catch(console.error);
+// .finally(() => client.end());

@@ -18,6 +18,7 @@ import Badge from "@material-ui/core/Badge";
 
 // Context
 import { DrawerContext } from "../DrawerContext";
+import { UserContext } from "../UserContext";
 
 // Styling
 import variables from "../styles";
@@ -29,6 +30,7 @@ function Nav() {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
     const { toggleDrawer } = useContext(DrawerContext);
+    const { cart } = useContext(UserContext);
 
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
@@ -101,7 +103,7 @@ function Nav() {
                         color="inherit"
                         aria-label="open account options drawer"
                         onClick={() => {
-                            toggleDrawer("accountLoggedOut");
+                            toggleDrawer("account");
                         }}
                     >
                         <PersonIcon className={icons} />
@@ -114,7 +116,7 @@ function Nav() {
                             toggleDrawer("cart");
                         }}
                     >
-                        <Badge badgeContent={4} color="secondary">
+                        <Badge badgeContent={cart.length} color="secondary">
                             <ShoppingCartIcon className={icons} />
                         </Badge>
                     </IconButton>

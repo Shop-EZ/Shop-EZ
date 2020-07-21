@@ -16,13 +16,15 @@ import Button from "@material-ui/core/Button";
 import Rating from "@material-ui/lab/Rating";
 import Card from "@material-ui/core/Card";
 
+// Context
+import { UserContext } from "../UserContext";
+
 // Styling
 import variables from "../styles";
 const { productCardStyling } = variables;
 
 // Other packages/modules
 import axios from "axios";
-import { DrawerContext } from "./../DrawerContext";
 
 /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
@@ -30,12 +32,13 @@ const useStyles = makeStyles(productCardStyling);
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-const userId = 1;
-
-function ProductCards({ cart, setCart }) {
+function ProductCards() {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
+    const { cart, setCart, user } = useContext(UserContext);
     const [products, setProducts] = useState([]);
+
+    const userId = user.id || 1;
 
     //Get all products by this user and store in a userState
     useEffect(() => {
@@ -56,20 +59,31 @@ function ProductCards({ cart, setCart }) {
 
     /*-------------------------------------------------------------- Helper Functions ------------------------------------------------------------------*/
 
-    async function createUserCart(product) {
-        // setCart([...cart, product.id]);
-
+    // Adds product to cart, creating a new cart if one does not already exist, and incrementing if product is already in cart
+    async function addToCart(product) {
         try {
-            const { data } = await axios.post(`api/carts/create/`, {
+            const { data: cartProductData } = await axios.get("/");
+
+            const { data } = await axios.post(`/api/carts/create/`, {
                 userId: userId,
                 productId: product.id,
-                priceTotal: product.price,
             });
 
+            // Cart already exists, but target product is not yet in that cart; adds product to cart
             if (data.name === "CartProductAddedSuccess") {
                 console.log(data);
-            } else if (data.name === "UpdatedProductQuantity&priceTotal") {
+                product.quantity = data.newCartProduct.qtyDesired;
+                setCart([...cart, product]);
+            }
+            // Cart already exists and target product also exists in that cart; increments the cart product
+            else if (data.name === "UpdatedProductQuantity") {
                 console.log(data);
+                product.quantity = data.updatedQuantity.qtyDesired;
+                setCart([...cart, product]);
+            } else if (data.name === "CartCreatedAndProductAdded") {
+                console.log(data);
+                product.quantity = data.newCartProduct.qtyDesired;
+                setCart([...cart, product]);
             } else {
                 console.error("Product not added to cart successfully");
             }
@@ -78,11 +92,6 @@ function ProductCards({ cart, setCart }) {
             throw err;
         }
     }
-
-    // Add productObj to cart
-    const addToCart = (product) => {
-        createUserCart(product);
-    };
 
     const cardTemplate = (product) => {
         return (

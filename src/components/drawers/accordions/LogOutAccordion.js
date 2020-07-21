@@ -3,7 +3,7 @@
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
 // React
-import React from "react";
+import React, { useContext } from "react";
 
 // Material-UI Components
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -12,6 +12,10 @@ import Typography from "@material-ui/core/Typography";
 import Accordion from "@material-ui/core/Accordion";
 import ListItem from "@material-ui/core/ListItem";
 
+// Context
+import { DrawerContext } from "../../../DrawerContext";
+import { UserContext } from "../../../UserContext";
+
 // Styling
 import variables from "../../../styles";
 const { accordionStyling } = variables;
@@ -19,6 +23,11 @@ const { accordionStyling } = variables;
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
 function LogOutAccordion() {
+    /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
+
+    const { setAlert, toggleDrawer } = useContext(DrawerContext);
+    const { setToken, setCart, setUser } = useContext(UserContext);
+
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
     const useStyles = makeStyles(accordionStyling);
@@ -34,9 +43,21 @@ function LogOutAccordion() {
     /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
 
     const handleLogOut = () => {
-        console.log("logging out...");
         localStorage.setItem("token", "");
-        console.log("finished logging out");
+        setToken("");
+        setAlert({
+            message: "You have successfully logged out",
+            severity: "success",
+            isVisible: true,
+        });
+        toggleDrawer("account");
+        setUser({
+            id: "",
+            username: "",
+            firstName: "",
+            lastName: "",
+        });
+        setCart([]);
     };
 
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/

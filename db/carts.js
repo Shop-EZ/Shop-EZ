@@ -18,7 +18,7 @@ const {
 /*---------------------------------- Functions ---------------------------------------*/
 
 // Add new cart to carts table and return new cart object
-const createCart = async ({ userId = NaN }) => {
+const createCart = async ({ userId = NaN, products = [] }) => {
     try {
         //NaN is the only value in JS not equal to istelf, so this will return true only if userId is NaN
         const isNotNum = userId !== userId;
@@ -34,11 +34,27 @@ const createCart = async ({ userId = NaN }) => {
                 [userId]
             );
 
+            if (cart && products.length) {
+                products.map(async (productId) => {
+                    const {
+                        rows: [cartProducts],
+                    } = await client.query(
+                        `
+                        INSERT INTO cart_products ("cartId", "productId")
+                        VALUES ($1, $2)
+                        RETURNING *;
+                    `,
+                        [cart.id, productId]
+                    );
+                });
+            }
+
             return cart;
+        } else if (isNotNum || typeof userId !== "number") {
         }
     } catch (error) {
         console.error(
-            `There's been an error creating cart @ createCart({userId=Nan}) in ./db/carts.js. ${error}`
+            `There's been an error creating cart @ createCart({userId=Nan, products="{}"}) in ./db/carts.js. ${error}`
         );
         throw error;
     }
@@ -53,9 +69,6 @@ const updateCart = async (id, fields) => {
     if (setString.length === 0) {
         return;
     }
-    console.log("id", id);
-    console.log("setstring", setString);
-    console.log("fields", fields);
     try {
         const {
             rows: [cart],
@@ -104,11 +117,9 @@ const getCartById = async (cartId) => {
 const deleteCart = async (cartId) => {
     try {
         const isCart = await getCartById(cartId);
-        console.log("cart", isCart);
 
         if (isCart) {
             const cartProducts = await getProductsByCartId(cartId);
-            console.log("cartProducts", cartProducts);
             const deletedCartProducts = await Promise.all(
                 cartProducts.map(
                     async (cartProdObj) =>
@@ -166,8 +177,6 @@ const getCartByUserId = async (userId) => {
 
 const insertProductToCart = async ({ userId = NaN, products = "{}" }) => {
     try {
-        console.log("userId is ", userId);
-        console.log("products is ", products);
         const {
             rows: [cart],
         } = await client.query(
