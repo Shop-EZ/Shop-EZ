@@ -10,7 +10,6 @@ const {
     getCartByUserId,
 } = require("../db");
 const { getUserProductsByUserId } = require("../db/user_products");
-const { getUserOrdersByUserId } = require("../db/user_orders");
 const { getProductById } = require("../db/products");
 const { getShopByUserId } = require("../db/shops");
 

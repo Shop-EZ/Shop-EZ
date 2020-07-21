@@ -86,12 +86,7 @@ function LogInAccordion() {
                 const { token, id, username, firstName, lastName } = data;
                 localStorage.setItem("token", token);
                 setToken(data.token);
-                setUser({
-                    id,
-                    username,
-                    firstName,
-                    lastName,
-                });
+                setUser({ id, username, firstName, lastName });
                 setAlert({
                     message: "You have successfully logged in",
                     severity: "success",

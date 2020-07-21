@@ -879,6 +879,8 @@ async function bootstrap() {
         await createInitialShops();
         await createInitialReviews();
         await createInitialCarts();
+
+        console.log(chalk.blue("Finished seeding!"));
     } catch (error) {
         console.error(
             "Error bootstrapping in ./db/seed.js at bootstrap(). Error: ",

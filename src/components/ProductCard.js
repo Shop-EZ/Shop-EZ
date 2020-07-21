@@ -71,7 +71,6 @@ function ProductCards() {
 
             // Cart already exists, but target product is not yet in that cart; adds product to cart
             if (data.name === "CartProductAddedSuccess") {
-                console.log(data);
                 product.quantity = data.newCartProduct.qtyDesired;
                 setCart([...cart, product]);
             }

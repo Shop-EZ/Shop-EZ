@@ -16,7 +16,7 @@ const { removeBtnStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-function RemoveBtn() {
+function RemoveBtn({ onClick }) {
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
     const useStyles = makeStyles(removeBtnStyling);
@@ -34,6 +34,7 @@ function RemoveBtn() {
                 classes={{
                     containedSecondary: removeBtn,
                 }}
+                onClick={onClick}
             >
                 <DeleteIcon className={trashIcon} />
             </Button>

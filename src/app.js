@@ -94,6 +94,45 @@ const App = () => {
         }
     };
 
+    // Adds commas in the proper thousandth places
+    function formatNumberWithCommas(num) {
+        // If number provided is neither of type string or number, return early
+        if (typeof num !== "number" && typeof num !== "string") return;
+        const parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+    }
+    // Converts numbers to numbers with a float of 2
+    function formatNumberWithDecimal(num) {
+        // If number provided is neither of type string or number, return early
+        if (typeof num !== "number" && typeof num !== "string") return;
+
+        if (+num === Math.floor(+num)) {
+            return `${num}.00`;
+        } else {
+            return Number(num).toFixed(2);
+        }
+    }
+
+    // Adds commas to numbers and makes it a float of 2
+    function formatPrice(num) {
+        return "$" + formatNumberWithCommas(formatNumberWithDecimal(num));
+    }
+
+    // Calculates sub-total for all items in cart
+    function calculateSubtotal() {
+        if (!cart || !cart.length) {
+            return;
+        }
+
+        function itemTotal(total, productObj) {
+            return total + +productObj.price * +productObj.qtyDesired;
+        }
+        let subTotal = cart.reduce(itemTotal, 0);
+        return subTotal;
+    }
+
+    const subTotal = formatPrice(calculateSubtotal());
     // Check if user is logged in and set their cart in state, else check if cart exists for non-user and set cart in state
 
     /*-------------------------------------------------------------- Initial Render ------------------------------------------------------------------*/
@@ -199,9 +238,14 @@ const App = () => {
             <CssBaseline>
                 <UserContext.Provider
                     value={{
+                        priceFormatFns: {
+                            calculateSubtotal,
+                            formatPrice,
+                        },
                         getCartProducts,
                         getUserCart,
                         setToken,
+                        subTotal,
                         setUser,
                         setCart,
                         token,

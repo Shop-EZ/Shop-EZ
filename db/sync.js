@@ -166,7 +166,7 @@ async function createTables() {
         console.log(chalk.greenBright("Finished creating tables!"));
     } catch (error) {
         console.error(
-            "Error creating tables @ db/seed.js createTables()! Error: ",
+            "Error creating tables @ db/sync.js createTables()! Error: ",
             error
         );
         throw error;
@@ -199,7 +199,7 @@ async function dropTables() {
 
         console.log(chalk.greenBright("Finished dropping tables!"));
     } catch (error) {
-        console.error("Error dropping tables @ db/seed.js! Error: ", error);
+        console.error("Error dropping tables @ db/sync.js! Error: ", error);
         throw error;
     }
 }

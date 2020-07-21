@@ -174,28 +174,26 @@ cartsRouter.put("/add/:productId", async function (req, res, next) {
 });
 
 //Remove Product From Cart Route-----WORKS!
-cartsRouter.delete("/deleteCartProduct/:productId", async function (
+cartsRouter.delete("/deleteCartProduct/:cartProductId", async function (
     req,
     res,
     next
 ) {
-    const { productId } = req.params;
-    const { cartId } = req.body;
+    const { cartProductId } = req.params;
 
     try {
-        const cartProduct = await getCartProductByCartAndProductId(
-            cartId,
-            productId
-        );
-
-        const deletedCartProduct = await removeProductFromCart(cartProduct.id);
+        const deletedCartProduct = await removeProductFromCart(cartProductId);
         if (deletedCartProduct) {
             res.send({
+                name: "RemoveCartProductSuccess",
                 message: "Product removed from cart.",
                 product: deletedCartProduct,
             });
         } else {
-            res.send({ message: "Error removing product from cart." });
+            res.send({
+                name: "RemoveCartProductError",
+                message: "Error removing product from cart.",
+            });
         }
     } catch (error) {
         console.error(error);
@@ -225,7 +223,8 @@ cartsRouter.get("/cartProducts/:cartId", requireUser, async function (
                             cartProduct.productId
                         );
                         //TODO: re-word to qtyDesired when Caleb changes this
-                        product.quantity = cartProduct.qtyDesired;
+                        product.qtyDesired = cartProduct.qtyDesired;
+                        product.cartProductId = cartProduct.id;
                         cartProductsArr.push(product);
                     })
                 );
