@@ -38,14 +38,15 @@ function ProductCards() {
     const { cart, setCart, user } = useContext(UserContext);
     const [products, setProducts] = useState([]);
 
-    const userId = user.id || 1;
+    const shopId = 1;
+    const userId = user.id;
 
     //Get all products by this user and store in a userState
     useEffect(() => {
         axios
-            .get(`api/users/products/${userId}`)
+            .get(`api/shops/products/${shopId}`)
             .then((res) => {
-                setProducts(res.data.userProducts);
+                setProducts(res.data.shopProducts);
             })
             .catch((err) => {
                 console.log(err);
@@ -71,18 +72,17 @@ function ProductCards() {
 
             // Cart already exists, but target product is not yet in that cart; adds product to cart
             if (data.name === "CartProductAddedSuccess") {
-                product.quantity = data.newCartProduct.qtyDesired;
-                setCart([...cart, product]);
+                setCart([...cart, data.newCartProduct]);
             }
             // Cart already exists and target product also exists in that cart; increments the cart product
             else if (data.name === "UpdatedProductQuantity") {
                 console.log(data);
-                product.quantity = data.updatedQuantity.qtyDesired;
-                setCart([...cart, product]);
+
+                setCart([...cart, data.updatedQuantity]);
             } else if (data.name === "CartCreatedAndProductAdded") {
-                console.log(data);
-                product.quantity = data.newCartProduct.qtyDesired;
-                setCart([...cart, product]);
+                console.log(data.newCartProduct);
+
+                setCart([...cart, data.newCartProduct]);
             } else {
                 console.error("Product not added to cart successfully");
             }
@@ -134,7 +134,7 @@ function ProductCards() {
                         </Typography>
                     </CardContent>
                     <Typography align="center">
-                        Quantity: {product.quantity}
+                        Quantity: {product.qtyAvailable}
                     </Typography>
                 </CardActionArea>
                 <Grid container className={classes.ratingContainer}>

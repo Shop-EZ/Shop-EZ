@@ -9,7 +9,7 @@ const {
     getUserById,
     getCartByUserId,
 } = require("../db");
-const { getUserProductsByUserId } = require("../db/user_products");
+const { getShopProductsByShopId } = require("../db/shop_products");
 const { getProductById } = require("../db/products");
 const { getShopByUserId } = require("../db/shops");
 
@@ -179,64 +179,39 @@ usersRouter.post("/token", async function (req, res, next) {
     }
 });
 
-//Get User Orders Route---------------------------------Works!
-usersRouter.get("/orders", async function (req, res, next) {
-    const { id } = req.params;
-    try {
-        const userOrders = await getUserOrdersByUserId(id);
+// //Get Products By UserID Route---------------------------------Works!
+// usersRouter.get("/products/:shopId", async function (req, res, next) {
+//     const userId = req.params.shopId;
 
-        if (!userOrders) {
-            next({
-                name: "NoOrdersForUserError",
-                message: "No orders found for that specified user",
-            });
-        }
+//     try {
+//         const shopProductIdsArr = await getShopProductsByShopId(shopId);
 
-        res.send({
-            name: "userOrdersFound",
-            message: "Orders for this user have been found. See attached",
-            userOrders,
-        });
-    } catch (error) {
-        console.error(error);
-        const { name, message } = error;
-        next({ name, message });
-    }
-});
+//         if (shopProductIdsArr && shopProductIdsArr.length) {
+//             const shopProducts = await Promise.all(
+//                 shopProductIdsArr.map(
+//                     async (shopProductIdObj) =>
+//                         await getProductById(shopProductIdObj.productId)
+//                 )
+//             );
 
-//Get Products By UserID Route---------------------------------Works!
-usersRouter.get("/products/:userId", async function (req, res, next) {
-    const userId = req.params.userId;
-
-    try {
-        const userProductIdsArr = await getUserProductsByUserId(userId);
-
-        if (userProductIdsArr && userProductIdsArr.length) {
-            const userProducts = await Promise.all(
-                userProductIdsArr.map(
-                    async (userProductIdObj) =>
-                        await getProductById(userProductIdObj.productId)
-                )
-            );
-
-            res.send({
-                name: "userProductsFound",
-                message:
-                    "Products for this user have been found. See attached.",
-                userProducts,
-            });
-        } else {
-            next({
-                name: "NoUserProductsFound",
-                message: "No products have been found for the specified user",
-            });
-        }
-    } catch (error) {
-        console.error(error);
-        const { name, message } = error;
-        next({ name, message });
-    }
-});
+//             res.send({
+//                 name: "shopProductsFound",
+//                 message:
+//                     "Products for this shop have been found. See attached.",
+//                 userProducts,
+//             });
+//         } else {
+//             next({
+//                 name: "NoShopProductsFound",
+//                 message: "No products have been found for the specified shop",
+//             });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         const { name, message } = error;
+//         next({ name, message });
+//     }
+// });
 
 //Get Shop By UserID Route---------------------------------Works!
 usersRouter.get("/shop/:userId", async function (req, res, next) {

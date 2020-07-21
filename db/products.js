@@ -9,7 +9,7 @@
 // qtyAvailable INTEGER NOT NULL,
 // delivery TEXT [],
 // rating FLOAT(1),
-// "userId" INTEGER REFERENCES users(id) NOT NULL,
+// "ShopId" INTEGER REFERENCES shops(id) NOT NULL,
 // "categoryId" INTEGER []
 
 /*------------------------------- Imports and Globals -----------------------------------*/
@@ -17,10 +17,10 @@
 const client = require("./client");
 const { getReviewsByProductId, deleteReview } = require("./reviews");
 const {
-    addProductToUser,
-    deleteProductFromUser,
-    getUserProductsByProductId,
-} = require("./user_products");
+    addProductToShop,
+    deleteProductFromShop,
+    getShopProductsByProductId,
+} = require("./shop_products");
 const {
     addCategoryToProduct,
     getCategoryProductsByProductId,
@@ -41,14 +41,14 @@ const createProduct = async ({
     qtyAvailable,
     delivery = "{}",
     rating,
-    userId,
+    shopId,
     categoryId = "{}",
 }) => {
     try {
         const {
             rows: [product],
         } = await client.query(
-            `INSERT INTO products (name, description, price, "qtyAvailable", delivery, rating, "userId", "categoryId")
+            `INSERT INTO products (name, description, price, "qtyAvailable", delivery, rating, "shopId", "categoryId")
             VALUES($1,$2,$3,$4,$5,$6,$7,$8)
             RETURNING *;
             `,
@@ -59,15 +59,15 @@ const createProduct = async ({
                 qtyAvailable,
                 delivery,
                 rating,
-                userId,
+                shopId,
                 categoryId,
             ]
         );
 
-        // Add newly created product to user_products table
-        const userProductsResult = await addProductToUser(
+        // Add newly created product to shop_products table
+        const shopProductsResult = await addProductToShop(
             product.id,
-            product.userId
+            product.shopId
         );
 
         //For each category the product is being associated with, create an entry in the category_products table for it
@@ -77,7 +77,7 @@ const createProduct = async ({
         const finalCategoryArr = targetCategoryArr.filter(
             (char) => char !== " " && char !== ","
         );
-        const prodcutCategories = await Promise.all(
+        const producutCategories = await Promise.all(
             finalCategoryArr.map(async (categoryId) => {
                 return await addCategoryToProduct(categoryId, product.id);
             })
@@ -86,7 +86,7 @@ const createProduct = async ({
         return product;
     } catch (error) {
         console.error(
-            `There's been an error creating a product @ createProduct({ name, description, price, "qtyAvailable", delivery={}, rating, userId, categoryId={} }) in ./db/products.js. ${error}`
+            `There's been an error creating a product @ createProduct({ name, description, price, "qtyAvailable", delivery={}, rating, shopId, categoryId={} }) in ./db/products.js. ${error}`
         );
         throw error;
     }
@@ -133,7 +133,7 @@ const deleteProduct = async (productId) => {
         if (cartProducts && cartProducts.id) {
             await Promise.all(
                 cartProducts.map(async (cartProductObj) => {
-                    return await deleteProductFromUser(cartProductObj.id);
+                    return await deleteProductFromShop(cartProductObj.id);
                 })
             );
         }
@@ -143,12 +143,12 @@ const deleteProduct = async (productId) => {
             const deletedReview = await deleteReview(productId);
         }
 
-        const userProductsArr = await getUserProductsByProductId(productId);
-        if (userProductsArr && userProductsArr.length) {
+        const shopProductsArr = await getShopProductsByProductId(productId);
+        if (shopProductsArr && shopProductsArr.length) {
             await Promise.all(
-                userProductsArr.map(async (userProductObj) => {
-                    console.log("userProductObj is ", userProductObj);
-                    const test = await deleteProductFromUser(userProductObj.id);
+                shopProductsArr.map(async (shopProductObj) => {
+                    console.log("shopProductObj is ", shopProductObj);
+                    const test = await deleteProductFromShop(shopProductObj.id);
                     console.log("test is ", test);
 
                     return test;
@@ -270,20 +270,20 @@ const getProductByName = async (productName) => {
 };
 
 // Returns an array of all products associated with the user with the specified userId, if any
-const getProductsByUserId = async (userId) => {
+const getProductsByShopId = async (shopId) => {
     try {
         const { rows } = await client.query(
             `
         SELECT * FROM products 
-        WHERE "userId"=$1
+        WHERE "shopId"=$1
         `,
-            [userId]
+            [shopId]
         );
 
         return rows;
     } catch (error) {
         console.error(
-            `There's been an error getting all products by userId @ getAllProductsByUserId(userId) in ./db/products.js. ${error}`
+            `There's been an error getting all products by shopId @ getAllProductsByShopId(shopId) in ./db/products.js. ${error}`
         );
         throw error;
     }
@@ -292,11 +292,11 @@ const getProductsByUserId = async (userId) => {
 // Sets active row for product of specified productId to false in products table
 const deactivateProduct = async (productId) => {
     try {
-        const userProductsArr = await getUserProductsByProductId(productId);
-        if (userProductsArr && userProductsArr.length) {
+        const shopProductsArr = await getShopProductsByProductId(productId);
+        if (shopProductsArr && shopProductsArr.length) {
             await Promise.all(
-                userProductsArr.map(async (userProductObj) => {
-                    return await deleteProductFromUser(userProductObj.id);
+                shopProductsArr.map(async (shopProductObj) => {
+                    return await deleteProductFromShop(shopProductObj.id);
                 })
             );
         }
@@ -351,7 +351,7 @@ module.exports = {
     getAllProducts,
     getProductById,
     getProductByName,
-    getProductsByUserId,
+    getProductsByShopId,
     updateProduct,
     deleteProduct,
     deactivateProduct,
