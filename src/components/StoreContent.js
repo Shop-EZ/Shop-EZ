@@ -32,6 +32,7 @@ function StoreContent({ cart, setCart }) {
     return (
         <Grid className={classes.storeContent}>
             <ProductCard cart={cart} setCart={setCart} />
+            {/* <ProductView /> */}
         </Grid>
     );
 }

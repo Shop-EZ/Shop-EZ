@@ -14,5 +14,5 @@ module.exports = {
     ...require("./cart_products"),
     ...require("./category_products"),
     ...require("./product_reviews"),
-    ...require("./user_products"),
+    ...require("./shop_products"),
 };

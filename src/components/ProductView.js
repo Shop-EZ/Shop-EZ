@@ -32,6 +32,84 @@ function ProductView() {
     const classes = useStyles();
 
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
+    const productViewTemplate = () => {
+        return (
+            <>
+                <Grid xs={12} sm={6} item>
+                    <Card className={classes.leftContainer} variant="outlined">
+                        <CardMedia
+                            className={classes.productViewMedia}
+                            height="100%"
+                            component="img"
+                            image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/thebreakfastclub-1548798769.jpg"
+                            title="Product example"
+                        />
+                        <Rating
+                            name="size-large"
+                            defaultValue={2}
+                            size="large"
+                        />
+                    </Card>
+                </Grid>
+
+                <Grid xs={12} sm={6} item>
+                    <Card
+                        height="100%"
+                        className={classes.rightContainer}
+                        variant="outlined"
+                    >
+                        <CardActionArea>
+                            <Typography
+                                align="center"
+                                className={classes.productViewTitle}
+                                gutterBottom
+                                variant="h5"
+                                component="h2"
+                            >
+                                Title
+                            </Typography>
+
+                            <Typography
+                                align="center"
+                                className={classes.productViewPrice}
+                                gutterBottom
+                                variant="h5"
+                                component="h2"
+                            >
+                                Price: $99.99
+                            </Typography>
+                            <CardContent>
+                                <Typography
+                                    className={classes.productViewContent}
+                                    component="p"
+                                >
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipiscing elit. Pellentesque quis suscipit
+                                    magna, vitae posuere dolor. Lorem ipsum
+                                    dolor sit amet, consectetur adipiscing elit.
+                                    Pellentesque quis suscipit magna, vitae
+                                    posuere dolor.Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit. Pellentesque
+                                    quis suscipit magna, vitae posuere
+                                    dolor.Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit. Pellentesque
+                                    quis suscipit magna, vitae posuere dolor.
+                                </Typography>
+                            </CardContent>
+                        </CardActionArea>
+                        <CardActions className={classes.productViewButtons}>
+                            <Button size="small" color="primary">
+                                Add to Cart
+                            </Button>
+                            <Button size="small" color="primary">
+                                Buy Now
+                            </Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </>
+        );
+    };
 
     return (
         <Grid
@@ -40,73 +118,7 @@ function ProductView() {
             className={classes.productContainer}
             align="center"
         >
-            <Grid xs={12} sm={6} item>
-                <Card className={classes.leftContainer} variant="outlined">
-                    <CardMedia
-                        className={classes.productViewMedia}
-                        height="100%"
-                        component="img"
-                        image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/thebreakfastclub-1548798769.jpg"
-                        title="Product example"
-                    />
-                    <Rating name="size-large" defaultValue={2} size="large" />
-                </Card>
-            </Grid>
-
-            <Grid Grid xs={12} sm={6} item>
-                <Card
-                    height="100%"
-                    className={classes.rightContainer}
-                    variant="outlined"
-                >
-                    <CardActionArea>
-                        <Typography
-                            align="center"
-                            className={classes.productViewTitle}
-                            gutterBottom
-                            variant="h5"
-                            component="h2"
-                        >
-                            Title
-                        </Typography>
-
-                        <Typography
-                            align="center"
-                            className={classes.productViewPrice}
-                            gutterBottom
-                            variant="h5"
-                            component="h2"
-                        >
-                            Price: $99.99
-                        </Typography>
-                        <CardContent>
-                            <Typography
-                                className={classes.productViewContent}
-                                component="p"
-                            >
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Pellentesque quis suscipit
-                                magna, vitae posuere dolor. Lorem ipsum dolor
-                                sit amet, consectetur adipiscing elit.
-                                Pellentesque quis suscipit magna, vitae posuere
-                                dolor.Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Pellentesque quis suscipit
-                                magna, vitae posuere dolor.Lorem ipsum dolor sit
-                                amet, consectetur adipiscing elit. Pellentesque
-                                quis suscipit magna, vitae posuere dolor.
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                    <CardActions className={classes.productViewButtons}>
-                        <Button size="small" color="primary">
-                            Add to Cart
-                        </Button>
-                        <Button size="small" color="primary">
-                            Buy Now
-                        </Button>
-                    </CardActions>
-                </Card>
-            </Grid>
+            {productViewTemplate()}
         </Grid>
     );
 }
