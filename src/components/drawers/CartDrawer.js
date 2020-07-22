@@ -68,14 +68,16 @@ function CartDrawer() {
                                 key={productObj.id}
                             />
                         ))}
-                        <ListItem>
-                            <div className={subTotalStyling}>
-                                <Typography>Sub-Total:</Typography>
-                                <Typography className={subTotalAmount}>
-                                    {subTotal}
-                                </Typography>
-                            </div>
-                        </ListItem>
+                        {subTotal !== "$undefined" ? (
+                            <ListItem>
+                                <div className={subTotalStyling}>
+                                    <Typography>Sub-Total:</Typography>
+                                    <Typography className={subTotalAmount}>
+                                        {subTotal}
+                                    </Typography>
+                                </div>
+                            </ListItem>
+                        ) : null}
                     </List>
                 </div>
             </div>

@@ -72,17 +72,45 @@ function ProductCards() {
 
             // Cart already exists, but target product is not yet in that cart; adds product to cart
             if (data.name === "CartProductAddedSuccess") {
-                setCart([...cart, data.newCartProduct]);
+                console.log(data);
+                const newCartProduct = data.newCartProduct;
+                newCartProduct.cartProductId = data.cartProductId;
+                setCart([...cart, newCartProduct]);
             }
             // Cart already exists and target product also exists in that cart; increments the cart product
             else if (data.name === "UpdatedProductQuantity") {
                 console.log(data);
 
-                setCart([...cart, data.updatedQuantity]);
+                const updatedProduct = data.updatedProduct;
+                updatedProduct.qtyDesired = data.newQty;
+                updatedProduct.cartProductId = data.cartProductId;
+                console.log("updatedProduct is ", updatedProduct);
+                const newCart = cart.map((cartProduct) => {
+                    console.log(
+                        "cartProduct.productId is ",
+                        cartProduct.productId,
+                        "product.id is ",
+                        product.id,
+                        "+cartProduct.id === product.id evaluates to ",
+                        +cartProduct.id === product.id
+                    );
+                    if (+cartProduct.id === product.id) {
+                        return data.updatedProduct;
+                    } else {
+                        return cartProduct;
+                    }
+                });
+
+                console.log("newCart is ", newCart);
+                setCart(newCart);
+
+                // Cart doens't exist and neither does product; create cart and add product to it
             } else if (data.name === "CartCreatedAndProductAdded") {
                 console.log(data.newCartProduct);
 
-                setCart([...cart, data.newCartProduct]);
+                const newCartProduct = data.newCartProduct;
+                newCartProduct.cartProductId = data.cartProductId;
+                setCart([...cart, newCartProduct]);
             } else {
                 console.error("Product not added to cart successfully");
             }

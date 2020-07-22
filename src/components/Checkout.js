@@ -36,6 +36,7 @@ import { DrawerContext } from "../DrawerContext";
 
 // Styling
 import variables from "../styles";
+import { format } from "morgan";
 const { checkoutStyling } = variables;
 
 /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
@@ -245,7 +246,6 @@ function Checkout({ setVisibility }) {
                         </div>
                     </AccordionDetails>
                 </Accordion>
-
                 <Accordion
                     className={classes.checkoutAccordion}
                     square
@@ -315,7 +315,6 @@ function Checkout({ setVisibility }) {
                         </div>
                     </AccordionDetails>
                 </Accordion>
-
                 <Accordion
                     className={classes.checkoutAccordion}
                     square
@@ -368,42 +367,48 @@ function Checkout({ setVisibility }) {
                         </div>
                     </AccordionDetails>
                 </Accordion>
-                <div className={classes.orderSummary}>
-                    <Typography className={classes.orderSummaryHeader}>
-                        Order Summary
+                {itemTotal !== "$undefined" ? (
+                    <div className={classes.orderSummary}>
+                        <Typography className={classes.orderSummaryHeader}>
+                            Order Summary
+                        </Typography>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Cart Items</Typography>
+                            <Typography>{itemTotal}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Shipping</Typography>
+                            <Typography>{formatPrice(shippingCost)}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Sub-Total</Typography>
+                            <Typography>{subTotal}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Tax</Typography>
+                            <Typography>{taxPrice}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography className={classes.processingFee}>
+                                Processing Fee
+                            </Typography>
+                            <Typography>{processingFee}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography className={classes.grandTotalHeader}>
+                                Total
+                            </Typography>
+                            <Typography className={classes.grandTotalAmount}>
+                                {grandTotal}
+                            </Typography>
+                        </div>
+                    </div>
+                ) : (
+                    <Typography className={classes.cartEmpty}>
+                        Cart is empty. Add products to your cart, and come back
+                        to visit!
                     </Typography>
-                    <div className={classes.summaryLineItem}>
-                        <Typography>Cart Items</Typography>
-                        <Typography>{itemTotal}</Typography>
-                    </div>
-                    <div className={classes.summaryLineItem}>
-                        <Typography>Shipping</Typography>
-                        <Typography>{shippingCost}</Typography>
-                    </div>
-                    <div className={classes.summaryLineItem}>
-                        <Typography>Sub-Total</Typography>
-                        <Typography>{subTotal}</Typography>
-                    </div>
-                    <div className={classes.summaryLineItem}>
-                        <Typography>Tax</Typography>
-                        <Typography>{taxPrice}</Typography>
-                    </div>
-                    <div className={classes.summaryLineItem}>
-                        <Typography className={classes.processingFee}>
-                            Processing Fee
-                        </Typography>
-                        <Typography>{processingFee}</Typography>
-                    </div>
-                    <div className={classes.summaryLineItem}>
-                        <Typography className={classes.grandTotalHeader}>
-                            Total
-                        </Typography>
-                        <Typography className={classes.grandTotalAmount}>
-                            {grandTotal}
-                        </Typography>
-                    </div>
-                </div>
-
+                )}
                 <div className={classes.buttonContainer}>
                     <Button
                         variant="contained"

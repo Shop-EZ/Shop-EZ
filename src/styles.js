@@ -535,6 +535,14 @@ const checkoutStyling = {
         fontSize: "3rem",
     },
 
+    cartEmpty: {
+        textAlign: "center",
+        fontWeight: "bold",
+        marginTop: "3rem",
+        fontSize: "3rem",
+        width: "70%",
+    },
+
     summaryLineItem: {
         justifyContent: "space-between",
         alignItems: "center",

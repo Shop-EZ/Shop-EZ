@@ -80,6 +80,7 @@ function CartBody({ qtyDesired, price, productId, cartProductId }) {
 
     const handleRemove = async (e) => {
         try {
+            console.log("cartProductId is ", cartProductId);
             const { data } = await axios.delete(
                 `/api/carts/deleteCartProduct/${cartProductId}`
             );
