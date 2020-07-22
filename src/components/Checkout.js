@@ -3,7 +3,7 @@
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
 // React
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 // Material-UI
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -30,8 +30,13 @@ import Radio from "@material-ui/core/Radio";
 // Local Components
 import CheckoutModal from "./CheckOutModal.js";
 
+// Context
+import { UserContext } from "../UserContext";
+import { DrawerContext } from "../DrawerContext";
+
 // Styling
 import variables from "../styles";
+import { format } from "morgan";
 const { checkoutStyling } = variables;
 
 /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
@@ -43,13 +48,10 @@ const useStyles = makeStyles(checkoutStyling);
 function Checkout({ setVisibility }) {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
-    //pass set visibility to checkout and checkout modal
-    //from there set visiblity to false on close handler
+    const [shippingCost, setShippingCosts] = useState(2.99);
+    const [expanded, setExpanded] = useState(false);
     const [submit, setSubmit] = useState(false);
-
-    const [expanded, setExpanded] = useState("");
     const [method, setMethod] = useState("");
-
     const [input, setInput] = useState({
         cardnumber: "",
         country: "",
@@ -66,6 +68,23 @@ function Checkout({ setVisibility }) {
         delivery: null,
     });
 
+    const { setAlert } = useContext(DrawerContext);
+    const { priceFormatFns } = useContext(UserContext);
+    const { calculateSubtotal, formatPrice } = priceFormatFns;
+
+    let itemTotal = calculateSubtotal();
+    let subTotal = itemTotal + shippingCost;
+    let taxPrice = itemTotal * 0.08;
+    let processingFee = itemTotal * 0.02;
+    let grandTotal =
+        itemTotal + subTotal + taxPrice + processingFee + shippingCost;
+
+    processingFee = formatPrice(processingFee);
+    grandTotal = formatPrice(grandTotal);
+    itemTotal = formatPrice(itemTotal);
+    subTotal = formatPrice(subTotal);
+    taxPrice = formatPrice(taxPrice);
+
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
     const classes = useStyles();
@@ -76,6 +95,7 @@ function Checkout({ setVisibility }) {
     };
 
     const handleChange = (panel) => (event, newExpanded) => {
+        console.log("event is ", event);
         setExpanded(newExpanded ? panel : false);
     };
 
@@ -91,7 +111,6 @@ function Checkout({ setVisibility }) {
         event.stopPropagation();
         event.preventDefault();
 
-        console.log("submitted");
         setSubmit(true);
         setInput({
             first: "",
@@ -110,16 +129,29 @@ function Checkout({ setVisibility }) {
         });
     };
 
+    const handleError = () => {
+        setAlert({
+            message: "Please fill out all the required fields to continue",
+            severity: "error",
+            isVisible: true,
+        });
+    };
+
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
     return (
         <div className={classes.wholeComponent}>
             <div className={`${classes.headerWrapper} ${classes.header}`}>
-                <PaymentIcon /> <h1> Checkout </h1>{" "}
+                <PaymentIcon className={classes.paymentIcon} />
+                <h1> Checkout </h1>
             </div>
             <h3 className={classes.header}>
                 Please fill out these fields to complete your order:
             </h3>
-            <form onSubmit={handleSubmit}>
+            <form
+                onSubmit={handleSubmit}
+                onError={handleError}
+                className={classes.checkoutForm}
+            >
                 <Accordion
                     className={classes.checkoutAccordion}
                     square
@@ -130,11 +162,11 @@ function Checkout({ setVisibility }) {
                         className={classes.accordionSummary}
                         aria-controls="panel1d-content"
                         id="panel1d-header"
+                        classes={{ content: classes.accordionSummaryContent }}
                     >
                         <div className={classes.headerWrapper}>
-                            <ListIcon />{" "}
+                            <ListIcon className={classes.listIcon} />
                             <Typography className={classes.headerText}>
-                                {" "}
                                 Shipping
                             </Typography>
                         </div>
@@ -214,7 +246,6 @@ function Checkout({ setVisibility }) {
                         </div>
                     </AccordionDetails>
                 </Accordion>
-
                 <Accordion
                     className={classes.checkoutAccordion}
                     square
@@ -225,12 +256,12 @@ function Checkout({ setVisibility }) {
                         className={classes.accordionSummary}
                         aria-controls="panel2d-content"
                         id="panel2d-header"
+                        classes={{ content: classes.accordionSummaryContent }}
                     >
                         <div className={classes.headerWrapper}>
-                            <AttachMoneyIcon />{" "}
+                            <AttachMoneyIcon className={classes.moneyIcon} />
                             <Typography className={classes.headerText}>
-                                {" "}
-                                Payment Information{" "}
+                                Payment Information
                             </Typography>
                         </div>
                     </AccordionSummary>
@@ -284,7 +315,6 @@ function Checkout({ setVisibility }) {
                         </div>
                     </AccordionDetails>
                 </Accordion>
-
                 <Accordion
                     className={classes.checkoutAccordion}
                     square
@@ -295,12 +325,11 @@ function Checkout({ setVisibility }) {
                         className={classes.accordionSummary}
                         aria-controls="panel3d-content"
                         id="panel3d-header"
+                        classes={{ content: classes.accordionSummaryContent }}
                     >
                         <div className={classes.headerWrapper}>
-                            {" "}
-                            <FlightTakeoffIcon />{" "}
+                            <FlightTakeoffIcon className={classes.flightIcon} />
                             <Typography className={classes.headerText}>
-                                {" "}
                                 Delivery Options
                             </Typography>
                         </div>
@@ -334,27 +363,79 @@ function Checkout({ setVisibility }) {
                                         label="Other"
                                     />
                                 </RadioGroup>
-                            </FormControl>{" "}
+                            </FormControl>
                         </div>
                     </AccordionDetails>
                 </Accordion>
-                <Container className={classes.completeButton}>
+                {itemTotal !== "$undefined" ? (
+                    <div className={classes.orderSummary}>
+                        <Typography className={classes.orderSummaryHeader}>
+                            Order Summary
+                        </Typography>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Cart Items</Typography>
+                            <Typography>{itemTotal}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Shipping</Typography>
+                            <Typography>{formatPrice(shippingCost)}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Sub-Total</Typography>
+                            <Typography>{subTotal}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography>Tax</Typography>
+                            <Typography>{taxPrice}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography className={classes.processingFee}>
+                                Processing Fee
+                            </Typography>
+                            <Typography>{processingFee}</Typography>
+                        </div>
+                        <div className={classes.summaryLineItem}>
+                            <Typography className={classes.grandTotalHeader}>
+                                Total
+                            </Typography>
+                            <Typography className={classes.grandTotalAmount}>
+                                {grandTotal}
+                            </Typography>
+                        </div>
+                    </div>
+                ) : (
+                    <Typography className={classes.cartEmpty}>
+                        Cart is empty. Add products to your cart, and come back
+                        to visit!
+                    </Typography>
+                )}
+                <div className={classes.buttonContainer}>
                     <Button
-                        type="submit"
-                        value="complete"
-                        variant="outlined"
+                        variant="contained"
                         color="secondary"
+                        value="cancel"
+                    >
+                        Back to Shopping
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        value="complete"
+                        type="submit"
                     >
                         Complete Order
                     </Button>
-                    {submit ? (
+                </div>
+                {submit ? (
+                    <Container className={classes.checkoutModalStyle}>
                         <CheckoutModal
                             submit={submit}
                             setSubmit={setSubmit}
                             setVisibility={setVisibility}
                         />
-                    ) : null}
-                </Container>
+                    </Container>
+                ) : null}
             </form>
         </div>
     );

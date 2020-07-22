@@ -3,7 +3,7 @@
 /*-------------------------------------------------------------- Imports ------------------------------------------------------------------*/
 
 //React Components
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 //Material-UI Components
 import { makeStyles } from "@material-ui/core/styles";
@@ -14,25 +14,34 @@ import ListItem from "@material-ui/core/ListItem";
 import CartHeader from "./CartHeader";
 import CartBody from "./CartBody";
 
+// Context
+import { UserContext } from "../../../../UserContext";
+
 // Styles
 import variables from "../../../../styles";
 const { accordionStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-function CartItemAccordion({ productObj, index }) {
+function CartItemAccordion({ productObj }) {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
+    const { priceFormatFns } = useContext(UserContext);
     const [expanded, setExpanded] = useState(false);
 
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+    const { formatPrice } = priceFormatFns;
 
-    const { name, price, quantity, id: productId } = productObj;
+    const {
+        id: productId,
+        cartProductId,
+        qtyDesired,
+        price,
+        name,
+    } = productObj;
+
     const formattedPrice = {
-        itemPrice: "",
         totalPrice: "",
+        itemPrice: "",
     };
 
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
@@ -43,43 +52,19 @@ function CartItemAccordion({ productObj, index }) {
 
     /*-------------------------------------------------------------- Helper Functions ------------------------------------------------------------------*/
 
-    // Adds commas in the proper thousandth places
-    function formatNumberWithCommas(num) {
-        // If number provided is neither of type string or number, return early
-        if (typeof num !== "number" && typeof num !== "string") return;
-        const parts = num.toString().split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-    }
-    // Converts numbers to numbers with a float of 2
-    function formatNumberWithDecial(num) {
-        // If number provided is neither of type string or number, return early
-        if (typeof num !== "number" && typeof num !== "string") return;
-
-        console.log(
-            "+num is ",
-            +num,
-            "math.floor(+num) is ",
-            Math.floor(+num),
-            "and +num === Math.floor(+num) evaluates to ",
-            +num === Math.floor(+num)
-        );
-        if (+num === Math.floor(+num)) {
-            return `${num}.00`;
-        } else {
-            return Number(num).toFixed(2);
-        }
-    }
-
-    function formatPrice(num, quantity) {
+    // Formats unit price and total item price and incudes dollar symbol
+    function formatPriceAndTotal(num, quantity) {
         const totalPrice = +quantity * +num;
-        formattedPrice.itemPrice =
-            "$" + formatNumberWithCommas(formatNumberWithDecial(num));
-        formattedPrice.totalPrice =
-            "$" + formatNumberWithCommas(formatNumberWithDecial(totalPrice));
+        formattedPrice.itemPrice = formatPrice(num);
+        formattedPrice.totalPrice = formatPrice(totalPrice);
     }
 
-    formatPrice(price, quantity);
+    formatPriceAndTotal(price, qtyDesired);
+    /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
@@ -92,16 +77,17 @@ function CartItemAccordion({ productObj, index }) {
                 classes={{ root: accordionRoot }}
             >
                 <CartHeader
-                    quantity={quantity}
+                    qtyDesired={qtyDesired}
                     index={productId}
                     price={formattedPrice.totalPrice}
                     name={name}
                 />
 
                 <CartBody
-                    quantity={quantity}
+                    qtyDesired={qtyDesired}
                     price={formattedPrice.itemPrice}
                     productId={productId}
+                    cartProductId={cartProductId}
                 />
             </Accordion>
         </ListItem>

@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import RemoveBtn from "../../buttons/RemoveBtn";
 
 // context
+import { DrawerContext } from "../../../../DrawerContext";
 import { UserContext } from "../../../../UserContext";
 
 // Styles
@@ -23,11 +24,12 @@ const { accordionStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-function CartBody({ quantity, price, productId }) {
+function CartBody({ qtyDesired, price, productId, cartProductId }) {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
     const { cart, setCart } = useContext(UserContext);
-    const [qty, setQty] = useState(quantity);
+    const { setAlert } = useContext(DrawerContext);
+    const [qty, setQty] = useState(qtyDesired);
 
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
@@ -36,13 +38,13 @@ function CartBody({ quantity, price, productId }) {
     const {
         cartAccordionDetails,
         priceContainer,
+        qty: qtStyle,
         productImage,
-        productInfo,
         qtyContainer,
+        productInfo,
         priceAmount,
         priceLabel,
         qtyCount,
-        qty: qtStyle,
     } = classes;
 
     /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
@@ -59,21 +61,63 @@ function CartBody({ quantity, price, productId }) {
                 }
             );
 
-            console.log("updated quantity should be ", data.qtyDesired);
-
             const newCart = cart.map((cartProduct) => {
                 if (+cartProduct.id === +productId) {
-                    return { ...cartProduct, ["quantity"]: data.qtyDesired };
+                    return { ...cartProduct, ["qtyDesired"]: data.qtyDesired };
                 } else {
                     return cartProduct;
                 }
             });
 
-            console.log("newCart is ", newCart);
             setCart(newCart);
         } catch (error) {
             console.error(
-                "There's been an error incrementing/decrementing cart product in CartBody.js @ handleIncrement?()",
+                "There's been an error incrementing/decrementing cart product in CartBody.js @ handleIncrement(e)",
+                error
+            );
+        }
+    };
+
+    const handleRemove = async (e) => {
+        try {
+            console.log("cartProductId is ", cartProductId);
+            const { data } = await axios.delete(
+                `/api/carts/deleteCartProduct/${cartProductId}`
+            );
+
+            if (data.name === "RemoveCartProductSuccess") {
+                let newCart = cart
+                    .map((cartProduct) => {
+                        if (+cartProduct.cartProductId !== +cartProductId) {
+                            return cartProduct;
+                        }
+                    })
+                    .filter((cartItem) => cartItem !== undefined);
+
+                setCart(newCart);
+                setAlert({
+                    message:
+                        "Product has been successfully removed from your cart",
+                    severity: "success",
+                    isVisible: true,
+                });
+            } else if (data.name === "CartProductNotFoundError") {
+                setAlert({
+                    message:
+                        "There's been an error removing this product from your cart",
+                    severity: "error",
+                    isVisible: true,
+                });
+            } else {
+                setAlert({
+                    message: "An unknown error occurred",
+                    severity: "error",
+                    isVisible: true,
+                });
+            }
+        } catch (error) {
+            console.error(
+                "There's been an error removing product from cart in CartBody.js @ handleRemove(e)",
                 error
             );
         }
@@ -81,7 +125,6 @@ function CartBody({ quantity, price, productId }) {
 
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
-    console.log("cart is ", cart);
     return (
         <AccordionDetails className={cartAccordionDetails}>
             <img
@@ -119,7 +162,7 @@ function CartBody({ quantity, price, productId }) {
                         onChange={(e) => handleIncrement(e)}
                     ></input>
                 </div>
-                <RemoveBtn />
+                <RemoveBtn onClick={handleRemove} />
             </div>
         </AccordionDetails>
     );

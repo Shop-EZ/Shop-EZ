@@ -20,6 +20,7 @@ import { UserContext } from "../../UserContext";
 
 // Styling
 import variables from "../../styles";
+import { ListItem, Typography } from "@material-ui/core";
 const { drawerStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
@@ -27,8 +28,8 @@ const { drawerStyling } = variables;
 function CartDrawer() {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
-    const { cart } = useContext(UserContext);
     const { drawer, toggleDrawer } = useContext(DrawerContext);
+    const { cart, subTotal } = useContext(UserContext);
 
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
@@ -37,9 +38,11 @@ function CartDrawer() {
     const classes = useStyles();
 
     const {
+        subTotal: subTotalStyling,
         drawer: drawerStyle,
         drawerContainer,
         blankSpaceCart,
+        subTotalAmount,
         drawerPaper,
         wrapper,
     } = classes;
@@ -59,13 +62,22 @@ function CartDrawer() {
                 <div id="cart-drawer" className={wrapper}>
                     <CheckoutBtn />
                     <List>
-                        {cart.map((productObj, index) => (
+                        {cart.map((productObj) => (
                             <CartItemAccordion
                                 productObj={productObj}
-                                index={index}
-                                key={index}
+                                key={productObj.id}
                             />
                         ))}
+                        {subTotal !== "$undefined" ? (
+                            <ListItem>
+                                <div className={subTotalStyling}>
+                                    <Typography>Sub-Total:</Typography>
+                                    <Typography className={subTotalAmount}>
+                                        {subTotal}
+                                    </Typography>
+                                </div>
+                            </ListItem>
+                        ) : null}
                     </List>
                 </div>
             </div>

@@ -276,7 +276,6 @@ const accordionStyling = {
 
 const drawerStyling = {
     // Drawer
-
     drawer: {
         overflowX: "hidden",
         width: drawerWidth,
@@ -309,7 +308,6 @@ const drawerStyling = {
     },
 
     // Accordions
-
     accordionRoot: {
         background: "rgba(255, 255, 255, 0.75)",
         width: "100%",
@@ -332,7 +330,6 @@ const drawerStyling = {
     },
 
     //Accordion Body
-
     form: {
         display: "flex",
         flexDirection: "column",
@@ -353,6 +350,18 @@ const drawerStyling = {
     submit: {
         width: "40%",
         margin: "1rem 0 0.5rem 0",
+    },
+
+    // Sub-Total
+    subTotal: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+    },
+
+    subTotalAmount: {
+        fontWeight: "bold",
     },
 };
 
@@ -405,62 +414,157 @@ const removeBtnStyling = {
 const checkoutStyling = {
     wholeComponent: {
         border: "solid #3d2f75 10px",
-        margin: "1 em",
+        justifyContent: "center",
+        flexDirection: "column",
         marginBottom: "1em",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
+        display: "flex",
+        margin: "1 rem",
+        height: "100%",
     },
+
     header: {
-        textAlign: "center",
-        width: "100%",
-        display: "flex",
         justifyContent: "center",
         alignItems: "center",
-    },
-    checkoutAccordion: {
         textAlign: "center",
-        marginRight: 150,
-        marginLeft: 150,
-        padding: 30,
-        background: "white",
-        width: "80%",
         display: "flex",
-        alignItems: "center",
+        width: "100%",
+    },
+
+    checkoutAccordion: {
         justifyContent: "center",
         flexDirection: "column",
+        alignItems: "center",
+        marginRight: "auto",
+        background: "white",
+        textAlign: "center",
+        marginLeft: "auto",
+        display: "flex",
+        width: "100%",
+        padding: 30,
     },
+
+    checkoutForm: {
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+        width: "70%",
+    },
+
     formControl: {
-        margin: 1,
         minWidth: 120,
+        margin: 1,
     },
+
     selectEmpty: {
         marginTop: 2,
     },
-    completeButton: {
+
+    checkoutModalStyle: {
+        marginBottom: "1em",
         textAlign: "center",
         marginTop: "1em",
-        marginBottom: "1em",
     },
+
+    buttonContainer: {
+        justifyContent: "space-between",
+        marginBottom: "3rem",
+        marginTop: "3rem",
+        display: "flex",
+        width: "85%",
+    },
+
+    completeButton: {
+        marginRight: "2rem",
+    },
+
     headerText: {
         width: "100%",
     },
+
     headerWrapper: {
-        display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        display: "flex",
     },
+
     iconPadding: {
         paddingRight: "1rem",
     },
+
     accordionDetails: {
+        justifyContent: "center",
         alignItems: "center",
+    },
+
+    accordionSummary: {
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+    },
+
+    accordionSummaryContent: {
         justifyContent: "center",
     },
-    accordionSummary: {
+
+    paymentIcon: {
+        marginRight: "0.5rem",
+        fontSize: "2rem",
+    },
+
+    flightIcon: {
+        marginRight: "0.5rem",
+        fontSize: "2rem",
+    },
+
+    listIcon: { marginRight: "0.5rem", fontSize: "2.2rem" },
+    moneyIcon: { fontSize: "1.8rem" },
+
+    // Order Summary
+    orderSummary: {
+        flexDirection: "column",
+        marginTop: "1rem",
+        display: "flex",
+        width: "80%",
+    },
+
+    orderSummaryHeader: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: "3rem",
+    },
+
+    cartEmpty: {
+        textAlign: "center",
+        fontWeight: "bold",
+        marginTop: "3rem",
+        fontSize: "3rem",
+        width: "70%",
+    },
+
+    summaryLineItem: {
+        justifyContent: "space-between",
         alignItems: "center",
-        justifyContent: "center",
+        marginTop: "0.7rem",
+        display: "flex",
+    },
+
+    processingFee: {
+        borderBottom: "3px solid black",
+        paddingBottom: "1rem",
+    },
+
+    grandTotalHeader: {
+        paddingTop: "0.3rem",
+        fontWeight: "bolder",
+        fontSize: "1rem",
+    },
+    grandTotalAmount: {
+        borderTop: "3px solid black",
+        paddingTop: "0.3rem",
+        fontWeight: "bold",
+        fontSize: "1rem",
     },
 };
 

@@ -16,7 +16,7 @@ const { accordionStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-function CartHeader({ quantity, name, price, index }) {
+function CartHeader({ qtyDesired, name, price, index }) {
     /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
 
     const useStyles = makeStyles(accordionStyling);
@@ -27,8 +27,6 @@ function CartHeader({ quantity, name, price, index }) {
         cartHeaderPrice,
         cartAccordion,
     } = classes;
-
-    const totalPrice = Number(price) * Number(quantity);
 
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
 
@@ -44,7 +42,7 @@ function CartHeader({ quantity, name, price, index }) {
                     variant="h3"
                     className={cartHeaderTitle}
                 >
-                    {`${quantity} x ${name}`}
+                    {`${qtyDesired} x ${name}`}
                 </Typography>
 
                 <Typography
