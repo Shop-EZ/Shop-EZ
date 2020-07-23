@@ -1270,5 +1270,5 @@ async function bootstrap() {
 
 bootstrap()
     // .then(testDB)
-    .catch(console.error);
-// .finally(() => client.end());
+    .catch(console.error)
+    .finally(() => client.end());
