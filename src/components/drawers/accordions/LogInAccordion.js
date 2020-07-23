@@ -16,7 +16,7 @@ import Button from "@material-ui/core/Button";
 
 // Local Components
 import BorderedInput from "./inputs/BoderedInput";
-import PasswordInput from "./Inputs/PasswordInput";
+import PasswordInput from "./inputs/PasswordInput";
 
 // Context
 import { DrawerContext } from "../../../DrawerContext";

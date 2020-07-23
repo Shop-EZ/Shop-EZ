@@ -8,7 +8,7 @@ import React, { useContext } from "react";
 // Material-UI Components
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/list";
+import List from "@material-ui/core/List";
 
 // Local Components
 import CartItemAccordion from "./accordions/cartAccordion/CartItemAccordion";

@@ -16,7 +16,7 @@ import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
 // Local Components
-import PasswordInput from "./Inputs/PasswordInput";
+import PasswordInput from "./inputs/PasswordInput";
 import BorderedInput from "./inputs/BoderedInput";
 import SignUpModal from "../../SignUpModal";
 
