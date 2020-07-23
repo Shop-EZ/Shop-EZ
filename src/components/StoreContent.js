@@ -30,10 +30,20 @@ function StoreContent({ cart, setCart }) {
 
     /*-------------------------------------------------------------- Component ------------------------------------------------------------------*/
     return (
-        <Grid className={classes.storeContent}>
-            <ProductCard cart={cart} setCart={setCart} />
-            {/* <ProductView /> */}
-        </Grid>
+        <>
+            <div className={classes.storeContent}>
+                <h2 className={classes.sectionTitle}>Astrology</h2>
+                <ProductCard shopId="1" />
+            </div>
+            <div className={classes.storeContent}>
+                <h2 className={classes.sectionTitle}>Tarot</h2>
+                <ProductCard shopId="2" height="35rem" />
+            </div>
+            <div className={classes.storeContent}>
+                <h2 className={classes.sectionTitle}>Crystals</h2>
+                <ProductCard shopId="3" />
+            </div>
+        </>
     );
 }
 

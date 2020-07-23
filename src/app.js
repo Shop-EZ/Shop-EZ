@@ -8,7 +8,11 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 // Material-UI
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import {
+    createMuiTheme,
+    ThemeProvider,
+    makeStyles,
+} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 // Local Components
@@ -28,7 +32,7 @@ import { UserContext } from "./UserContext";
 
 // Styling
 import variables from "./styles";
-const { muiTheme } = variables;
+const { muiTheme, appStyling } = variables;
 
 // Other packages/modules
 import axios from "axios";
@@ -60,6 +64,14 @@ const App = () => {
     });
     const [visibility, setVisibility] = useState(false);
     const [submit, setSubmit] = useState(false);
+
+    /*-------------------------------------------------------------- Styling ------------------------------------------------------------------*/
+
+    const useStyles = makeStyles(appStyling);
+
+    const classes = useStyles();
+
+    const { appStyle } = classes;
 
     /*-------------------------------------------------------------- Helper Functions ------------------------------------------------------------------*/
 
@@ -264,7 +276,7 @@ const App = () => {
                             alert,
                         }}
                     >
-                        <div id="app">
+                        <div id="app" className={appStyle}>
                             <Nav />
                             <CartDrawer />
 
@@ -296,7 +308,6 @@ const App = () => {
                                 severity={alert.severity}
                                 handleClose={handleClose}
                             />
-                            <Footer />
                         </div>
                     </DrawerContext.Provider>
                 </UserContext.Provider>

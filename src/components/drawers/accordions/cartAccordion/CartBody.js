@@ -24,7 +24,7 @@ const { accordionStyling } = variables;
 
 /*-------------------------------------------------------------- Globals ------------------------------------------------------------------*/
 
-function CartBody({ qtyDesired, price, productId, cartProductId }) {
+function CartBody({ qtyDesired, price, productId, cartProductId, image }) {
     /*-------------------------------------------------------------- State ------------------------------------------------------------------*/
 
     const { cart, setCart } = useContext(UserContext);
@@ -129,8 +129,8 @@ function CartBody({ qtyDesired, price, productId, cartProductId }) {
         <AccordionDetails className={cartAccordionDetails}>
             <img
                 className={productImage}
-                src="/assets/placeholder_product.png"
-                alt="A generic placeholder image of an outline of sunglasses"
+                src={image}
+                alt="A placeholder image"
             />
             <div className={productInfo}>
                 <div className={priceContainer}>

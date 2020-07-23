@@ -56,9 +56,11 @@ function StoreHeader() {
 
     return (
         <Grid className={classes.storeHeader} position="static">
-            <Typography align="center" variant="h5" noWrap>
-                {shop.name}
-            </Typography>
+            <img
+                src="/assets/store_logo.png"
+                alt="The store logo, feautring an outline of an eye over a stylistic sunset in the back with the words '3rd Eye Crafts' above"
+                className={classes.storeLogo}
+            />
         </Grid>
     );
 }

@@ -113,6 +113,7 @@ shopsRouter.get("/products/:shopId", async function (req, res, next) {
                 )
             );
 
+            console.log("shopProducts are ", shopProducts);
             res.send({
                 name: "shopProductsFound",
                 message:

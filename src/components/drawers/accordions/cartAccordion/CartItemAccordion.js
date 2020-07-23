@@ -35,6 +35,7 @@ function CartItemAccordion({ productObj }) {
         id: productId,
         cartProductId,
         qtyDesired,
+        image,
         price,
         name,
     } = productObj;
@@ -88,6 +89,7 @@ function CartItemAccordion({ productObj }) {
                     price={formattedPrice.itemPrice}
                     productId={productId}
                     cartProductId={cartProductId}
+                    image={image}
                 />
             </Accordion>
         </ListItem>
