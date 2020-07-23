@@ -1,5 +1,7 @@
 // ./src/styles
 
+import { BackgroundColor, white } from "chalk";
+
 const primaryAccent = "rgba(173,119,235, 1)";
 const secondaryAccent = "rgba(216,166,29, 1)";
 const textColor = "rgba(255, 255, 255, 1)";
@@ -35,6 +37,7 @@ const navStyling = {
         height: navHeight,
         diplay: "flex",
         zIndex: 1301,
+        boxShadow: `0 1px 75px -13px ${secondaryAccent}`,
     },
 
     navHeader: {
@@ -331,11 +334,10 @@ const drawerStyling = {
 
     //Accordion Body
     form: {
-        display: "flex",
+        width: "100%",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-around",
-        width: "100%",
     },
 
     input: {
@@ -413,32 +415,37 @@ const removeBtnStyling = {
 
 const checkoutStyling = {
     wholeComponent: {
-        border: "solid #3d2f75 10px",
         justifyContent: "center",
         flexDirection: "column",
-        marginBottom: "1em",
         alignItems: "center",
         display: "flex",
-        margin: "1 rem",
         height: "100%",
+        margin: 0,
+        border: 0,
     },
 
     header: {
+        textShadow: `2px 2px black`,
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
+        color: textColor,
         display: "flex",
         width: "100%",
     },
 
     checkoutAccordion: {
+        boxShadow: `0 -2px 20px -5px ${secondaryAccent}`,
+        backgroundColor: "rgba(0, 0, 0, 0.95)",
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
+        borderRadius: "25px",
         marginRight: "auto",
-        background: "white",
         textAlign: "center",
+        background: "white",
         marginLeft: "auto",
+        color: textColor,
         display: "flex",
         width: "100%",
         padding: 30,
@@ -448,13 +455,19 @@ const checkoutStyling = {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        background: "none",
         display: "flex",
         width: "70%",
     },
 
     formControl: {
-        minWidth: 120,
+        minWidth: 170,
         margin: 1,
+    },
+    inputLabel: {
+        paddingLeft: "30px",
+        color: "rgb(90, 90, 90)",
+        paddingRight: "20px",
     },
 
     selectEmpty: {
@@ -480,6 +493,7 @@ const checkoutStyling = {
     },
 
     headerText: {
+        fontSize: "2rem",
         width: "100%",
     },
 
@@ -494,8 +508,25 @@ const checkoutStyling = {
     },
 
     accordionDetails: {
+        backgroundImage: "url('/assets/input_bg.png')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "contain",
+        padding: "2rem 4rem 1rem 4rem",
         justifyContent: "center",
+        borderRadius: "10px",
         alignItems: "center",
+        width: "100%",
+    },
+
+    accordionDetailsPayment: {
+        backgroundImage: "url('/assets/input_bg.png')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "contain",
+        padding: "2rem 4rem 1rem 4rem",
+        justifyContent: "center",
+        borderRadius: "10px",
+        alignItems: "center",
+        width: "100%",
     },
 
     accordionSummary: {
@@ -508,6 +539,19 @@ const checkoutStyling = {
         justifyContent: "center",
     },
 
+    inputBoxRight: {
+        boxShadow: "0 0 3px rgba(216,166,29, 0.4)",
+        background: "rgba(255, 255, 255, 0.85)",
+        borderRadius: "10px",
+    },
+
+    inputBoxLeft: {
+        boxShadow: "0 0 3px rgba(216,166,29, 0.4)",
+        background: "rgba(255, 255, 255, 0.85)",
+        margin: "0 1rem 1rem 0",
+        borderRadius: "10px",
+    },
+
     paymentIcon: {
         marginRight: "0.5rem",
         fontSize: "2rem",
@@ -518,21 +562,35 @@ const checkoutStyling = {
         fontSize: "2rem",
     },
 
-    listIcon: { marginRight: "0.5rem", fontSize: "2.2rem" },
-    moneyIcon: { fontSize: "1.8rem" },
+    listIcon: {
+        marginRight: "0.5rem",
+        fontSize: "2.5rem",
+    },
+
+    moneyIcon: {
+        fontSize: "2.2rem",
+    },
 
     // Order Summary
     orderSummary: {
+        boxShadow: `0 1px 10px -1px ${secondaryAccent}`,
+        background: "rgba(0, 0, 0, 0.93)",
+        backgroundImage: "url('/assets/input_bg.png')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "contain",
         flexDirection: "column",
-        marginTop: "1rem",
+        padding: "2rem 4rem",
+        borderRadius: "10px",
+        marginTop: "2rem",
         display: "flex",
-        width: "80%",
+        width: "90%",
     },
 
     orderSummaryHeader: {
         textAlign: "center",
         fontWeight: "bold",
         fontSize: "3rem",
+        color: textColor,
     },
 
     cartEmpty: {
@@ -547,11 +605,12 @@ const checkoutStyling = {
         justifyContent: "space-between",
         alignItems: "center",
         marginTop: "0.7rem",
+        color: textColor,
         display: "flex",
     },
 
     processingFee: {
-        borderBottom: "3px solid black",
+        borderBottom: "3px solid white",
         paddingBottom: "1rem",
     },
 
@@ -566,27 +625,96 @@ const checkoutStyling = {
         fontWeight: "bold",
         fontSize: "1rem",
     },
+
+    buttonsStyle: {
+        boxShadow: `0 2px 54px -3px ${secondaryAccent}`,
+        background: "rgba(0, 0, 0, 0.97)",
+        borderRadius: "8px",
+        fontSize: "0.9rem",
+
+        "&:hover": {
+            boxShadow: `0 2px 54px 10px ${secondaryAccent}`,
+            background: "rgb(62,77,50)",
+        },
+    },
+
+    formLabel: {
+        color: textColor,
+    },
+
+    radio: {
+        boxShadow: "0 0 3px rgba(216,166,29, 0.4)",
+        background: "rgba(255, 255, 255, 0.85)",
+        borderRadius: "10px",
+        padding: "0.5rem 2rem 0.5rem 0.8rem",
+        marginRight: "2rem",
+        color: "rgb(90,90,90)",
+    },
+
+    dropDown: {
+        boxShadow: "0 0 3px rgba(216,166,29, 0.4)",
+        background: "rgba(255, 255, 255, 0.75)",
+        color: "rgb(90,90,90)",
+        borderRadius: "10px",
+        marginRight: "2rem",
+
+        "&:hover": {
+            background: "rgba(255, 255, 255, 0.75)",
+        },
+    },
+
+    paymentInput: {
+        background: "rgba(255, 255, 255, 0.85)",
+        borderRadius: "10px",
+        marginRight: "2rem",
+        color: "rgb(90,90,90)",
+    },
 };
 
 const productCardStyling = {
     cardSize: {
         height: "100%",
     },
+
+    sectionTitle: {
+        color: textColor,
+        textShadow: `0 1px 3px ${secondaryAccent}`,
+        fontSize: "4rem",
+    },
+
     productTitle: {
-        paddingTop: 10,
+        textShadow: `0 1px 3px ${secondaryAccent}`,
+        marginBottom: "1rem",
+        fontSize: "1.7rem",
         paddingBottom: 10,
         paddingRight: 10,
+        color: textColor,
         paddingLeft: 10,
-        background: "#ad77eb",
-        color: "#ffffff",
+        paddingTop: 10,
     },
-    productPrice: {},
-    productMedia: {
-        padding: 10,
+
+    productTitleHover: {
+        textShadow: `0 1px 3px ${secondaryAccent}`,
+        marginBottom: "1rem",
+        fontSize: "1.8rem",
+        cursor: "pointer",
+        paddingBottom: 10,
+        paddingRight: 10,
+        color: textColor,
+        paddingLeft: 10,
+        paddingTop: 10,
     },
-    productContent: {
-        padding: 10,
+
+    productDescription: {
         justifyContent: "center",
+        marginTop: "0.3rem",
+        padding: 10,
+    },
+
+    productContentBottom: {
+        justifyContent: "center",
+        marginTop: "1rem",
+        padding: 10,
     },
     ratingContainer: {
         justifyContent: "center",
@@ -594,6 +722,50 @@ const productCardStyling = {
     },
     cardButtons: {
         justifyContent: "center",
+    },
+
+    hide: {
+        display: "none",
+    },
+
+    addToCart: {
+        // background: "rgba(216,166,29, 0.7)",
+        boxShadow: `0 0 5px ${secondaryAccent}`,
+        background: "rgba(0, 0, 0, 0.85)",
+        position: "absolute",
+        borderRadius: "5px",
+        paddingBottom: "0",
+        fontSize: "3rem",
+        paddingTop: "0",
+        color: "white",
+        width: "80%",
+        left: "2.8rem",
+        top: "15rem",
+
+        "&:hover": {
+            cursor: "pointer",
+        },
+    },
+
+    ratingStyle: {
+        position: "absolute",
+        fontSize: "3rem",
+        top: "19.5rem",
+        left: "6rem",
+
+        "&:hover": {
+            cursor: "pointer",
+        },
+    },
+
+    priceAndQty: {
+        justifyContent: "space-evenly",
+        alignItem: "center",
+        display: "flex",
+    },
+
+    gridRoot: {
+        width: "100%",
     },
 };
 
@@ -632,22 +804,40 @@ const productViewStyling = {
 
 const storeContentStyling = {
     storeContent: {
-        marginRight: 75,
-        marginLeft: 75,
-        padding: 30,
-        background: "#3d2f75",
+        boxShadow: `0 1px 23px -5px ${secondaryAccent}`,
+        background: "rgba(0, 0, 0, 0.96)",
+        paddingBottom: "1rem",
+        marginBottom: "20rem",
+        borderRadius: "18px",
+        marginTop: "28rem",
+        width: "100%",
+    },
+    sectionTitle: {
+        textShadow: `0 1px 3px ${secondaryAccent}`,
+        marginLeft: "3rem",
+        paddingTop: "3rem",
+        color: textColor,
+        fontSize: "4rem",
     },
 };
 
 const storeHeaderStyling = {
     storeHeader: {
-        background: "#3d2f75",
-        marginTop: 30,
-        marginBottom: 30,
-        marginLeft: 75,
-        marginRight: 75,
-        padding: 20,
+        boxShadow: `0 1px 23px -5px ${secondaryAccent}`,
+        borderRadius: "5px 5px 17px 17px",
+        background: "rgba(0, 0, 0, 0.96)",
+        justifyContent: "center",
+        padding: "3.5rem 0",
+        fontSize: "4.5rem",
         color: "#ffffff",
+        display: "flex",
+        width: "100%",
+        height: "40%",
+    },
+
+    storeLogo: {
+        height: "auto",
+        width: "25rem",
     },
 };
 
@@ -662,6 +852,14 @@ const noticeStyling = {
         textAlign: "center",
         display: "flex",
         opacity: 0.8,
+    },
+};
+
+const appStyling = {
+    appStyle: {
+        backgroundImage: "url('/assets/bg_8.jpg')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "contain",
     },
 };
 
@@ -681,6 +879,7 @@ const variables = {
     primaryAccent,
     inputStyling,
     drawerWidth,
+    appStyling,
     navStyling,
     themeMain,
     navHeight,

@@ -26,6 +26,7 @@ import ListIcon from "@material-ui/icons/List";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import Radio from "@material-ui/core/Radio";
+import Input from "@material-ui/core/Input";
 
 // Local Components
 import CheckoutModal from "./CheckOutModal.js";
@@ -174,74 +175,82 @@ function Checkout({ setVisibility }) {
                     <AccordionDetails className={classes.accordionDetails}>
                         <div>
                             <TextField
-                                required
-                                value={input.first}
+                                className={classes.inputBoxLeft}
                                 onChange={handleInput("first")}
-                                id="filled-basic"
+                                value={input.first}
                                 label="First Name"
+                                id="filled-basic"
                                 variant="filled"
+                                required
                             />
                             <TextField
-                                required
-                                value={input.last}
+                                className={classes.inputBoxRight}
                                 onChange={handleInput("last")}
+                                value={input.last}
                                 id="filled-basic"
-                                label="Last Name "
+                                label="Last Name"
                                 variant="filled"
+                                required
                             />
                             <br></br>
                             <TextField
-                                required
-                                value={input.street}
                                 onChange={handleInput("street")}
-                                id="filled-basic"
+                                className={classes.inputBoxLeft}
+                                value={input.street}
                                 label="Street Address"
+                                id="filled-basic"
                                 variant="filled"
+                                required
                             />
                             <TextField
-                                required
-                                value={input.city}
+                                className={classes.inputBoxRight}
                                 onChange={handleInput("city")}
+                                value={input.city}
                                 id="filled-basic"
+                                variant="filled"
                                 label="City"
-                                variant="filled"
+                                required
                             />
                             <br></br>
                             <TextField
-                                required
-                                value={input.state}
+                                className={classes.inputBoxLeft}
                                 onChange={handleInput("state")}
-                                id="filled-basic"
                                 inputProps={{ maxLength: 2 }}
-                                label="State"
+                                value={input.state}
+                                id="filled-basic"
                                 variant="filled"
+                                label="State"
+                                required
                             />
                             <TextField
-                                required
-                                value={input.country}
+                                className={classes.inputBoxRight}
                                 onChange={handleInput("country")}
+                                value={input.country}
                                 id="filled-basic"
-                                label="Country"
                                 variant="filled"
+                                label="Country"
+                                required
                             />
                             <br></br>
                             <TextField
-                                required
-                                value={input.zip}
+                                className={classes.inputBoxLeft}
                                 onChange={handleInput("zip")}
-                                id="filled-basic"
-                                label="Zip"
                                 inputProps={{ maxLength: 5 }}
+                                value={input.zip}
+                                id="filled-basic"
                                 variant="filled"
+                                label="Zip"
+                                required
                             />
                             <TextField
-                                required
-                                value={input.phone}
+                                className={classes.inputBoxRight}
                                 onChange={handleInput("phone")}
                                 inputProps={{ maxLength: 10 }}
+                                value={input.phone}
                                 id="filled-basic"
-                                label="Phone"
                                 variant="filled"
+                                label="Phone"
+                                required
                             />
                         </div>
                     </AccordionDetails>
@@ -268,7 +277,12 @@ function Checkout({ setVisibility }) {
                     <AccordionDetails>
                         <div>
                             <FormControl className={classes.formControl}>
-                                <InputLabel id="method">Method</InputLabel>
+                                <InputLabel
+                                    id="method"
+                                    className={classes.inputLabel}
+                                >
+                                    Card Type
+                                </InputLabel>
                                 <Select
                                     labelId="cards"
                                     value={method}
@@ -276,6 +290,7 @@ function Checkout({ setVisibility }) {
                                         methodChange(e);
                                     }}
                                     variant="filled"
+                                    className={classes.dropDown}
                                 >
                                     <MenuItem value="Visa">Visa</MenuItem>
                                     <MenuItem value="Mastercard">
@@ -294,6 +309,7 @@ function Checkout({ setVisibility }) {
                                 label="Credit Card Number"
                                 variant="filled"
                                 inputProps={{ maxLength: 19 }}
+                                className={classes.paymentInput}
                             />
                             <TextField
                                 required
@@ -303,11 +319,13 @@ function Checkout({ setVisibility }) {
                                 label="CVV Code "
                                 variant="filled"
                                 inputProps={{ maxLength: 4 }}
+                                className={classes.paymentInput}
                             />
                             <TextField
                                 required
                                 value={input.exp}
                                 onChange={handleInput("exp")}
+                                className={classes.paymentInput}
                                 id="filled-basic"
                                 label="EXP"
                                 variant="filled"
@@ -344,23 +362,25 @@ function Checkout({ setVisibility }) {
                                     value={input.delivery}
                                     row
                                     aria-label="options"
-                                    name="Delivery Options"
                                     onChange={handleRadioChange}
                                 >
                                     <FormControlLabel
                                         value="Ground"
                                         control={<Radio />}
                                         label="Ground"
+                                        className={classes.radio}
                                     />
                                     <FormControlLabel
                                         value="Overnight"
                                         control={<Radio />}
                                         label="Overnight"
+                                        className={classes.radio}
                                     />
                                     <FormControlLabel
                                         value="Other"
                                         control={<Radio />}
                                         label="Other"
+                                        className={classes.radio}
                                     />
                                 </RadioGroup>
                             </FormControl>
@@ -411,14 +431,17 @@ function Checkout({ setVisibility }) {
                 )}
                 <div className={classes.buttonContainer}>
                     <Button
+                        className={classes.buttonsStyle}
                         variant="contained"
                         color="secondary"
                         value="cancel"
+                        onClick={() => setVisibility(false)}
                     >
                         Back to Shopping
                     </Button>
 
                     <Button
+                        className={classes.buttonsStyle}
                         variant="contained"
                         color="secondary"
                         value="complete"
@@ -430,9 +453,9 @@ function Checkout({ setVisibility }) {
                 {submit ? (
                     <Container className={classes.checkoutModalStyle}>
                         <CheckoutModal
-                            submit={submit}
-                            setSubmit={setSubmit}
                             setVisibility={setVisibility}
+                            setSubmit={setSubmit}
+                            submit={submit}
                         />
                     </Container>
                 ) : null}

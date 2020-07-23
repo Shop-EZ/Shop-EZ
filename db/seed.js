@@ -44,11 +44,8 @@ const {
     getProductsByCartId,
     addCategoryToProduct,
     removeCategoryFromProduct,
-    addProductToUser,
-    deleteProductFromUser,
     deactivateProduct,
     deactivateUser,
-    getProductsByUserId,
 } = require("./index");
 
 /*---------------------------------- Functions ---------------------------------------*/
@@ -313,7 +310,8 @@ async function createTables() {
                 rating FLOAT(1),
                 "shopId" INTEGER NOT NULL REFERENCES shops(id) ON DELETE CASCADE,
                 "categoryId" INTEGER [],
-                active BOOLEAN DEFAULT true
+                active BOOLEAN DEFAULT true,
+                image text
             );`);
 
         //shop_products join table
@@ -573,6 +571,10 @@ async function createInitialCategories() {
 
     const education = await createCategory({ name: "education" });
 
+    const crystals = await createCategory({ name: "crystals" });
+
+    const services = await createCategory({ name: "services" });
+
     try {
         console.log(chalk.greenBright("Finished creating initial categories!"));
     } catch (error) {
@@ -596,6 +598,28 @@ async function createInitialShops() {
     console.log(chalk.yellow("Creating initial shops..."));
 
     try {
+        const third = await createShop({
+            userId: 1,
+            name: "3rd",
+            products: "{10, 11, 12, 13}",
+            description: "The go to online shop for all your occult needs",
+        });
+
+        const eye = await createShop({
+            userId: 1,
+            name: "Eye",
+            products: "{14, 15, 16, 17}",
+            description: "The go to online shop for all your occult needs",
+        });
+
+        const craft = await createShop({
+            userId: 1,
+            name: "Crafts",
+            products:
+                "{18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39}",
+            description: "The go to online shop for all your occult needs",
+        });
+
         const calebsRocks = await createShop({
             userId: 3,
             name: "Caleb's Rocks",
@@ -617,14 +641,6 @@ async function createInitialShops() {
             products: "{2}",
             description:
                 "The one-stop shop for all your DJ'ing needs. And when I say all, I really mean ALL!",
-        });
-
-        const fullStack = await createShop({
-            userId: 1,
-            name: "Fullstack Academy of Code",
-            products: "{4, 1}",
-            description:
-                "A coding bootcamp dedicated to helping you excel in the tech industry",
         });
 
         console.log(chalk.greenBright("Finished creating initial shops!"));
@@ -685,7 +701,7 @@ async function createInitialProducts() {
             qtyAvailable: 50,
             delivery: '{"standard"}',
             rating: 5.0,
-            shopId: 2,
+            shopId: 4,
             categoryId: "{1}",
         });
 
@@ -697,7 +713,7 @@ async function createInitialProducts() {
             qtyAvailable: 999,
             delivery: '{"electronic"}',
             rating: 5.0,
-            shopId: 1,
+            shopId: 4,
             categoryId: "{5}",
         });
 
@@ -708,7 +724,7 @@ async function createInitialProducts() {
             qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 3,
-            shopId: 1,
+            shopId: 4,
             categoryId: "{5}",
         });
 
@@ -720,7 +736,7 @@ async function createInitialProducts() {
             qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 4.0,
-            shopId: 1,
+            shopId: 4,
             categoryId: "{5}",
         });
 
@@ -732,7 +748,7 @@ async function createInitialProducts() {
             qtyAvailable: 40,
             delivery: '{"electronic"}',
             rating: 2.0,
-            shopId: 1,
+            shopId: 4,
             categoryId: "{5}",
         });
 
@@ -743,7 +759,7 @@ async function createInitialProducts() {
             qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 4.0,
-            shopId: 1,
+            shopId: 4,
             categoryId: "{5}",
         });
 
@@ -755,8 +771,365 @@ async function createInitialProducts() {
             qtyAvailable: 100,
             delivery: '{"electronic"}',
             rating: 3.0,
-            shopId: 1,
+            shopId: 4,
             categoryId: "{5}",
+        });
+
+        const astrology1 = await createProduct({
+            name: "Star Chart Reading (30 minutes)",
+            description:
+                "An reading of the main planetary placements of your birth chart",
+            price: "30.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 1,
+            categoryId: "{7}",
+            image: "/assets/astrology_4.png",
+        });
+
+        const astrology2 = await createProduct({
+            name: "Star Chart Reading (1hr)",
+            description:
+                "An comprehensive reading of the all the planetary placements in your birth chart",
+            price: "50.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 1,
+            categoryId: "{7}",
+            image: "/assets/astrology_1.jpg",
+        });
+
+        const astrology3 = await createProduct({
+            name: "Star Chart Reading (1.5hr)",
+            description:
+                "An comprehensive reading of the planetary placements in your birth chart and the placement of your 12 planetart houses",
+            price: "70.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 1,
+            categoryId: "{7}",
+            image: "/assets/astrology_2.png",
+        });
+
+        const astrology4 = await createProduct({
+            name: "Star Chart Reading (2hr)",
+            description:
+                "An comprehensive reading of  your planetary placements, house placements, and the relations (aspects) between them. Our most comprehensive package!",
+            price: "90.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 1,
+            categoryId: "{7}",
+            image: "/assets/astrology_3.png",
+        });
+
+        const tarot1 = await createProduct({
+            name: "Tarot Reading (1 card spread)",
+            description:
+                "Have one burning question you'd like insight on? Our one card spread package is perfect!",
+            price: "20.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 2,
+            categoryId: "{7}",
+            image: "/assets/tarot_4.png",
+        });
+
+        const tarot2 = await createProduct({
+            name: "Tarot Reading (3 card spread)",
+            description:
+                "Looking for deeper insight on a matter in your life? The 3 card spread will tell you the main factors influencing the matter as well as the dynamics of its past, present, and future",
+            price: "35.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 2,
+            categoryId: "{7}",
+            image: "/assets/tarot_1.png",
+        });
+
+        const tarot3 = await createProduct({
+            name: "Tarot Reading (5 card spread)",
+            description:
+                "The 5 card spread is for those looking for deep clarity on an issue they are dealing with. This reading informs you of the major and minor influences contributing to the matter, the temporal context of the issue, and the ways you can take control of your destiny",
+            price: "55.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 2,
+            categoryId: "{7}",
+            image: "/assets/tarot_2.png",
+        });
+
+        const tarot4 = await createProduct({
+            name: "Tarot Reading (10 card spread)",
+            description:
+                "Not for the faint-of-heart! Our 10 card spread is a deeply intuitive reading that can provide insight both about an external matter, as well as introspective qualities that you may not even be tuned into",
+            price: "67.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 2,
+            categoryId: "{7}",
+            image: "/assets/tarot_3.png",
+        });
+
+        const cystal2 = await createProduct({
+            name: "Purple Amethyst",
+            description: "Purple Amethyst crystals from the third dimension",
+            price: "33.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/amethyst_3.png",
+        });
+
+        const cystal5 = await createProduct({
+            name: "Bismuth",
+            description:
+                "Locally sourced authentic Glowing Amethyst to help soothe your energies",
+            price: "30.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/bismuth_3.png",
+        });
+
+        const cystal6 = await createProduct({
+            name: "Blue Quartz",
+            description:
+                "A blue quartz crystal from the sea cavarns of Atlantis",
+            price: "17.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/blue_quartz.png",
+        });
+
+        const cystal8 = await createProduct({
+            name: "Cavansite",
+            description:
+                "An ancienct cavansite stone to channel the deep energies of the unknown",
+            price: "130.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/cavansite.png",
+        });
+
+        const cystal10 = await createProduct({
+            name: "White Diamond",
+            description:
+                "A pure diamond, ethically sourced diamond. So pretty!",
+            price: "1000.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/diamond.png",
+        });
+
+        const cystal12 = await createProduct({
+            name: "Holographic Quartz",
+            description:
+                "Some say staring into this crystal will cause visual halucinations",
+            price: "107.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/holographic_quartz.png",
+        });
+
+        const cystal13 = await createProduct({
+            name: "Moonstone",
+            description: "This crystal is beyond this world!",
+            price: "60.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/moonstone.png",
+        });
+
+        const cystal15 = await createProduct({
+            name: "Amethyst",
+            description:
+                "Locally sourced authentic Glowing Amethyst to help soothe your energies",
+            price: "10.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/purple_crystal.png",
+        });
+
+        const cystal16 = await createProduct({
+            name: "Icestone",
+            description:
+                "Only found in the depths of the icy tundra, this crysal is one of a kind!",
+            price: "70.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/quartz.png",
+        });
+
+        const cystal17 = await createProduct({
+            name: "Saphire",
+            description: "A crystal that's almost as beautiful as you are ;)",
+            price: "100.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/quartz_2.png",
+        });
+
+        const cystal3 = await createProduct({
+            name: "Bismuth",
+            description:
+                "This rainbow colored crystal contains every color of the spectrum and beyond",
+            price: "30.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/bismuth.png",
+        });
+
+        const cystal18 = await createProduct({
+            name: "Josephite",
+            description:
+                "Many a prophecy have been enscribed in reference to this sacred crystal",
+            price: "300.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/rose_quartz.png",
+        });
+
+        const cystal19 = await createProduct({
+            name: "Rose Quartz",
+            description: "A rosy crystal filled with romantic energy",
+            price: "28.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/rose_quartz_2.png",
+        });
+
+        const cystal20 = await createProduct({
+            name: "Rainbow Quartz",
+            description: "The most colorful crystal in the quartz family",
+            price: "400.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/rainbow_quartz.png",
+        });
+
+        const cystal21 = await createProduct({
+            name: "Ruby",
+            description: "A fiery stone for a fiery personality",
+            price: "300.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/ruby.png",
+        });
+
+        const cystal22 = await createProduct({
+            name: "Oceanite",
+            description:
+                "From the deepest trenches of the sea, a stone that knows no equivalent",
+            price: "250.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/saphire.png",
+        });
+
+        const cystal23 = await createProduct({
+            name: "Smoky Quartz",
+            description:
+                "Bright and dark at the same time, smoky quartz is a rare find for the avid collector",
+            price: "50.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/smoky_quartz.png",
+        });
+        const cystal1 = await createProduct({
+            name: "Glowing Amethyst",
+            description:
+                "When regular amethysts just don't cut it, glowing amethysts are the way to go",
+            price: "40.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/amethyst.png",
+        });
+
+        const cystal14 = await createProduct({
+            name: "Morganite",
+            description:
+                "We don't know who this Morgan is, but he sure does have a sweet crysal named after him",
+            price: "15.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/morganite.png",
+        });
+
+        const cystal4 = await createProduct({
+            name: "Bismuth",
+            description:
+                "The classic bismuth structure, with it's interlaced quadratic patterns makes its appearance",
+            price: "30.00",
+            qtyAvailable: 100,
+            delivery: '{"ground"}',
+            rating: 5.0,
+            shopId: 3,
+            categoryId: "{6}",
+            image: "/assets/bismuth_2.png",
         });
 
         console.log(chalk.greenBright("Finished creating initial products!"));
@@ -853,7 +1226,7 @@ async function createInitialCarts() {
 
         const yahyasCart = await createCart({
             userId: 4,
-            products: [1, 4, 2],
+            products: [21, 14, 32],
         });
 
         const anonsCart = await createCart({

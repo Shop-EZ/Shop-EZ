@@ -49,6 +49,17 @@ function Nav() {
         nav,
     } = classes;
 
+    /*-------------------------------------------------------------- Helper Functions ------------------------------------------------------------------*/
+
+    function getTotalCartItems() {
+        let totalProducts = 0;
+
+        cart.forEach((productObj) => {
+            totalProducts = totalProducts + +productObj.qtyDesired;
+        });
+        return totalProducts;
+    }
+
     /*-------------------------------------------------------------- Event Handlers ------------------------------------------------------------------*/
 
     const handleSubmit = () => {};
@@ -71,7 +82,6 @@ function Nav() {
                         variant="contained"
                         color="secondary"
                         startIcon={<ExploreIcon />}
-                        disabled
                     >
                         Explore
                     </Button>
@@ -85,10 +95,9 @@ function Nav() {
                         <ArrowDropDown className={icons} />
                     </IconButton>
                     <input
-                        type="search"
-                        placeholder="search (under construction)"
                         className={mainSearchInput}
-                        disabled
+                        placeholder="search"
+                        type="search"
                     ></input>
                     <IconButton
                         aria-label="main search filters"
@@ -100,8 +109,8 @@ function Nav() {
 
                 <div className="nav-buttons">
                     <IconButton
-                        color="inherit"
                         aria-label="open account options drawer"
+                        color="inherit"
                         onClick={() => {
                             toggleDrawer("account");
                         }}
@@ -116,7 +125,10 @@ function Nav() {
                             toggleDrawer("cart");
                         }}
                     >
-                        <Badge badgeContent={cart.length} color="secondary">
+                        <Badge
+                            badgeContent={getTotalCartItems()}
+                            color="secondary"
+                        >
                             <ShoppingCartIcon className={icons} />
                         </Badge>
                     </IconButton>
