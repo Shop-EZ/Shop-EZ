@@ -25,6 +25,17 @@ async function createTables() {
             );`
         );
 
+        //TODO: Add media array
+        //Shops table
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS shops(
+                id SERIAL PRIMARY KEY,
+                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                name VARCHAR(255) UNIQUE NOT NULL,
+                products INTEGER [],
+                description TEXT
+            );`);
+
         //TODO: Add image array
         //Products table
         await client.query(`
@@ -36,16 +47,17 @@ async function createTables() {
                 "qtyAvailable" INTEGER NOT NULL,
                 delivery TEXT [],
                 rating FLOAT(1),
-                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "shopId" INTEGER NOT NULL REFERENCES shops(id) ON DELETE CASCADE,
                 "categoryId" INTEGER [],
-                active BOOLEAN DEFAULT true
+                active BOOLEAN DEFAULT true,
+                image text
             );`);
 
-        //User_products join table
+        //shop_products join table
         await client.query(`
-            CREATE TABLE IF NOT EXISTS user_products (
+            CREATE TABLE IF NOT EXISTS shop_products (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                "shopId" INTEGER NOT NULL REFERENCES shops(id) ON DELETE CASCADE,
                 "productId" INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE
             );`);
 
@@ -92,17 +104,6 @@ async function createTables() {
                  "qtyDesired" INTEGER DEFAULT '1',
                  UNIQUE ("cartId","productId")
             
-            );`);
-
-        //TODO: Add media array
-        //Shops table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS shops(
-                id SERIAL PRIMARY KEY,
-                "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-                name VARCHAR(255) UNIQUE NOT NULL,
-                products INTEGER [],
-                description TEXT
             );`);
 
         //Receipts table
@@ -166,7 +167,7 @@ async function createTables() {
         console.log(chalk.greenBright("Finished creating tables!"));
     } catch (error) {
         console.error(
-            "Error creating tables @ db/sync.js createTables()! Error: ",
+            "Error creating tables @ db/seed.js createTables()! Error: ",
             error
         );
         throw error;
@@ -185,21 +186,22 @@ async function dropTables() {
         DROP TABLE IF EXISTS user_support_messages;
         DROP TABLE IF EXISTS support_messages;
         DROP TABLE IF EXISTS receipts;
-        DROP TABLE IF EXISTS shops;
         DROP TABLE IF EXISTS product_reviews;
         DROP TABLE IF EXISTS reviews;
         DROP TABLE IF EXISTS cart_products;
         DROP TABLE IF EXISTS carts;
         DROP TABLE IF EXISTS category_products;
         DROP TABLE IF EXISTS categories;
-        DROP TABLE IF EXISTS user_products;
+        DROP TABLE IF EXISTS shop_products;
+        Drop TABLE IF EXISTS user_products;
         DROP TABLE IF EXISTS products;
+        DROP TABLE IF EXISTS shops;
         DROP TABLE IF EXISTS users;
         `);
 
         console.log(chalk.greenBright("Finished dropping tables!"));
     } catch (error) {
-        console.error("Error dropping tables @ db/sync.js! Error: ", error);
+        console.error("Error dropping tables @ db/seed.js! Error: ", error);
         throw error;
     }
 }
