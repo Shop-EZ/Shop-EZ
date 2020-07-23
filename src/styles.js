@@ -594,11 +594,19 @@ const checkoutStyling = {
     },
 
     cartEmpty: {
+        boxShadow: `0 1px 10px -1px ${secondaryAccent}`,
+        background: "rgba(0, 0, 0, 0.93)",
+        backgroundImage: "url('/assets/input_bg.png')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "contain",
+        borderRadius: "10px",
         textAlign: "center",
         fontWeight: "bold",
         marginTop: "3rem",
+        color: textColor,
         fontSize: "3rem",
-        width: "70%",
+        padding: "3rem",
+        width: "90%",
     },
 
     summaryLineItem: {
