@@ -629,8 +629,13 @@ const checkoutStyling = {
     buttonsStyle: {
         boxShadow: `0 2px 54px -3px ${secondaryAccent}`,
         background: "rgba(0, 0, 0, 0.97)",
-        borderRdadius: "8px",
+        borderRadius: "8px",
         fontSize: "0.9rem",
+
+        "&:hover": {
+            boxShadow: `0 2px 54px 10px ${secondaryAccent}`,
+            background: "rgb(62,77,50)",
+        },
     },
 
     formLabel: {
