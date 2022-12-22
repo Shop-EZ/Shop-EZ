@@ -43,7 +43,7 @@
         "chalk": "^4.1.0",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "madge": "^3.9.2",
         "material-ui-banner": "^1.4.3",
         "moment": "^2.27.0",
